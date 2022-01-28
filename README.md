@@ -1,7 +1,7 @@
 # Minebit Networking
 
 ### Info
-- This is the library used to make java networking easier and contains various utilities useful for most java network applications.
+- This is a library that makes java networking easier and contains various utilities useful for most java network applications. 
 - It is created by **Minebit Utilities**
 - **License:**
 	- This application is licenced under the GPL-3.0 Licence. For more information see [here](LICENSE.md).
