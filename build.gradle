@@ -1,0 +1,32 @@
+plugins {
+	id 'java'
+	id 'eclipse'
+}
+
+sourceCompatibility = targetCompatibility = '1.11'
+
+dependencies {
+}
+
+sourceSets {
+	main {
+		java {
+			srcDirs 'src/main/java'
+		}
+		resources {
+			srcDirs 'src/main/resource'
+			srcDirs 'src/main/config' 
+		}
+	}
+}
+
+repositories {
+	jcenter()
+	mavenCentral() 
+}
+
+jar {
+	version = '0.1' 
+	destinationDir = file("exports/")
+	from sourceSets.main.java.srcDirs
+}
