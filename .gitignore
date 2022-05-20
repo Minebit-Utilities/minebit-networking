@@ -16,4 +16,4 @@ build
 eclipse
 run
 exports
-src/main/test
+src/test
