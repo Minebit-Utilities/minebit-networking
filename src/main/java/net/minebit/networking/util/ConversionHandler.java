@@ -1,4 +1,4 @@
-package net.minebit.networking.conversions;
+package net.minebit.networking.util;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -83,9 +83,9 @@ public final class ConversionHandler {
 	}
 
 	/**
-	 * This method obtains and returns the first qualified method for byte to object
-	 * conversions found inside the given glass. A qualified method must:
-	 * <li>Be annotated with the {@link Convert} annotation.
+	 * This method obtains and returns the method for byte to object conversions
+	 * found inside the given glass. A qualified method must:
+	 * <li>Be called <code>toBytes()</code>.
 	 * <li>Be static.
 	 * <li>Be public.
 	 * <li>Return an object with a type of that class.
@@ -100,10 +100,14 @@ public final class ConversionHandler {
 		if (inputClass == null) {
 			throw new InvalidInputException("The given class cannot be NULL!");
 		}
-		for (Method method : inputClass.getDeclaredMethods()) {
-			if (Modifier.isStatic(method.getModifiers()) && Modifier.isPublic(method.getModifiers()) && method.isAnnotationPresent(Convert.class) && method.getReturnType() == ByteBuffer.class && method.getParameterTypes().length == 1 && method.getParameterTypes()[0] == inputClass) {
-				return method;
-			}
+		Method method;
+		try {
+			method = inputClass.getDeclaredMethod("toBytes", inputClass);
+		} catch (Exception exception) {
+			throw new InvalidInputException("The given class isn't qualified for object to byte conversions!", exception);
+		}
+		if (Modifier.isStatic(method.getModifiers()) && Modifier.isPublic(method.getModifiers()) && method.getReturnType() == ByteBuffer.class) {
+			return method;
 		}
 		throw new InvalidInputException("The given class isn't qualified for object to byte conversions!");
 	}
@@ -111,7 +115,7 @@ public final class ConversionHandler {
 	/**
 	 * This method obtains and returns the first qualified method for object to byte
 	 * conversions found inside the given glass. A qualified method must:
-	 * <li>Be annotated with the {@link Convert} annotation.
+	 * <li>Be called <code>toObject()</code>.
 	 * <li>Be static.
 	 * <li>Be public.
 	 * <li>Return a {@link ByteBuffer}.
@@ -126,10 +130,14 @@ public final class ConversionHandler {
 		if (inputClass == null) {
 			throw new InvalidInputException("The given class cannot be NULL!");
 		}
-		for (Method method : inputClass.getDeclaredMethods()) {
-			if (Modifier.isStatic(method.getModifiers()) && Modifier.isPublic(method.getModifiers()) && method.isAnnotationPresent(Convert.class) && method.getReturnType() == inputClass && method.getParameterTypes().length == 1 && method.getParameterTypes()[0] == ByteBuffer.class) {
-				return method;
-			}
+		Method method;
+		try {
+			method = inputClass.getDeclaredMethod("toObject", ByteBuffer.class);
+		} catch (Exception exception) {
+			throw new InvalidInputException("The given class isn't qualified for byte to object conversions!", exception);
+		}
+		if (Modifier.isStatic(method.getModifiers()) && Modifier.isPublic(method.getModifiers()) && method.getReturnType() == inputClass) {
+			return method;
 		}
 		throw new InvalidInputException("The given class isn't qualified for byte to object conversions!");
 	}
