@@ -1,11 +1,11 @@
-package net.minebit.networking.util;
+package net.minebit.networking.common;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.nio.ByteBuffer;
 
-import net.minebit.networking.exceptions.ConversionException;
-import net.minebit.networking.exceptions.InvalidInputException;
+import net.minebit.networking.common.exceptions.ConversionException;
+import net.minebit.networking.common.exceptions.InvalidInputException;
 
 /**
  * {@link ConversionHandler} is a class that handles the conversion of object to
@@ -85,11 +85,13 @@ public final class ConversionHandler {
 	/**
 	 * This method obtains and returns the method for byte to object conversions
 	 * found inside the given glass. A qualified method must:
+	 * <ul>
 	 * <li>Be called <code>toBytes()</code>.
 	 * <li>Be static.
 	 * <li>Be public.
 	 * <li>Return an object with a type of that class.
 	 * <li>Have a {@link ByteBuffer} as the only parameter.
+	 * </ul>
 	 * 
 	 * @param inputClass The class from which the method can be obtained.
 	 * @return The first qualified method of the given class.
@@ -115,11 +117,13 @@ public final class ConversionHandler {
 	/**
 	 * This method obtains and returns the first qualified method for object to byte
 	 * conversions found inside the given glass. A qualified method must:
+	 * <ul>
 	 * <li>Be called <code>toObject()</code>.
 	 * <li>Be static.
 	 * <li>Be public.
 	 * <li>Return a {@link ByteBuffer}.
 	 * <li>Have an object with a type of that class as the only parameter.
+	 * </ul>
 	 * 
 	 * @param inputClass The class from which the method can be obtained.
 	 * @return The first qualified method of the given class.

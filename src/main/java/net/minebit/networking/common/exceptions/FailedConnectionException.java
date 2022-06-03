@@ -1,19 +1,21 @@
-package net.minebit.networking.exceptions;
+package net.minebit.networking.common.exceptions;
 
 /**
- * {@link ConversionException} is a {@link MinebitNetworkingException} that is
- * thrown to indicate that there was an error concerning conversions.
+ * {@link FailedConnectionException} is a {@link MinebitNetworkingException}
+ * that is thrown to indicate that an error occurred when a connection between a
+ * client and a server has failed.
  * 
  * @author Aggelowe
+ * @since 0.1
  *
  */
-public class ConversionException extends MinebitNetworkingException {
+public class FailedConnectionException extends MinebitNetworkingException {
 
 	/**
 	 * Constructs a new {@link InvalidClassException} with <i>null</i> as the
 	 * exception message.
 	 */
-	public ConversionException() {
+	public FailedConnectionException() {
 		super();
 	}
 
@@ -23,7 +25,7 @@ public class ConversionException extends MinebitNetworkingException {
 	 * 
 	 * @param message The message of the exception.
 	 */
-	public ConversionException(String message) {
+	public FailedConnectionException(String message) {
 		super(message);
 	}
 
@@ -34,7 +36,7 @@ public class ConversionException extends MinebitNetworkingException {
 	 * @param message The message of the exception.
 	 * @param cause   The cause of the exception.
 	 */
-	public ConversionException(String message, Throwable cause) {
+	public FailedConnectionException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
@@ -45,10 +47,10 @@ public class ConversionException extends MinebitNetworkingException {
 	 * @param cause The cause of the exception.
 	 */
 
-	public ConversionException(Throwable cause) {
+	public FailedConnectionException(Throwable cause) {
 		super(cause);
 	}
 
 	private static final long serialVersionUID = -8474697166522822938L;
-	
+
 }

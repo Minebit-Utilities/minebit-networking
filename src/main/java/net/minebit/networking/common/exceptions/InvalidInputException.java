@@ -1,10 +1,11 @@
-package net.minebit.networking.exceptions;
+package net.minebit.networking.common.exceptions;
 
 /**
  * {@link InvalidInputException} is a {@link MinebitNetworkingException} that is
  * thrown to indicate that there was an error with the input given or received.
  * 
  * @author Aggelowe
+ * @since 0.1
  *
  */
 public class InvalidInputException extends MinebitNetworkingException {

@@ -1,4 +1,4 @@
-package net.minebit.networking.exceptions;
+package net.minebit.networking.common.exceptions;
 
 /**
  * <i>MinebitNetworkingException</i> is an {@link Exception} that is the
@@ -6,6 +6,7 @@ package net.minebit.networking.exceptions;
  * Networking.
  * 
  * @author Aggelowe
+ * @since 0.1
  *
  */
 public class MinebitNetworkingException extends Exception {
@@ -38,7 +39,7 @@ public class MinebitNetworkingException extends Exception {
 	public MinebitNetworkingException(Throwable cause) {
 		super(cause);
 	}
-	
+
 	/**
 	 * Constructs a new {@link MinebitNetworkingException} with a specified
 	 * exception message and cause.
@@ -49,7 +50,7 @@ public class MinebitNetworkingException extends Exception {
 	public MinebitNetworkingException(String message, Throwable cause) {
 		super(message, cause);
 	}
-	
+
 	private static final long serialVersionUID = -8880766421012018247L;
 
 }
