@@ -1,6 +1,7 @@
 package net.minebit.networking.converting;
 
 import net.minebit.networking.exceptions.conversions.PrimitiveConversionException;
+import net.minebit.networking.exceptions.general.InputException;
 
 /**
  * {@link PrimitiveConverter} handles the conversion of primitives to byte
@@ -15,8 +16,8 @@ public final class PrimitiveConverter {
 	/**
 	 * This method returns the given primitive as a byte array.
 	 * 
-	 * @param input The primitive to convert to bytes.
-	 * @return The result of the conversion.
+	 * @param input The primitive to convert to bytes
+	 * @return The result of the conversion
 	 * @throws PrimitiveConversionException If an error occurs while converting the
 	 *                                      primitive.
 	 */
@@ -172,4 +173,201 @@ public final class PrimitiveConverter {
 		return result;
 	}
 
+	/**
+	 * This method returns the given byte array as a primitive.
+	 * 
+	 * @param input       The bytes to convert to a primitive
+	 * @param objectClass The class of the output object
+	 * @return The result of the conversion
+	 * @throws PrimitiveConversionException If an error occurs while converting the
+	 *                                      bytes
+	 */
+	public static Object convertToObject(byte[] input, Class<?> objectClass) throws PrimitiveConversionException {
+		if (input == null) {
+			throw new PrimitiveConversionException("The given input cannot be NULL!");
+		}
+		if (objectClass == null) {
+			throw new PrimitiveConversionException("The given class cannot be NULL!");
+		}
+		if (objectClass.equals(Boolean.class)) {
+			boolean result = bytesToBoolean(input);
+			return new Boolean(result);
+		}
+		if (objectClass.equals(Byte.class)) {
+			byte result = bytesToByte(input);
+			return new Byte(result);
+		}
+		if (objectClass.equals(Short.class)) {
+			short result = bytesToShort(input);
+			return new Short(result);
+		}
+		if (objectClass.equals(Integer.class)) {
+			int result = bytesToInteger(input);
+			return new Integer(result);
+		}
+		if (objectClass.equals(Long.class)) {
+			long result = bytesToLong(input);
+			return new Long(result);
+		}
+		if (objectClass.equals(Float.class)) {
+			float result = bytesToFloat(input);
+			return new Float(result);
+		}
+		if (objectClass.equals(Double.class)) {
+			double result = bytesToDouble(input);
+			return new Double(result);
+		}
+		if (objectClass.equals(Character.class)) {
+			char result = bytesToCharacter(input);
+			return new Character(result);
+		}
+		throw new PrimitiveConversionException("The given object is not a primitive!");
+	}
+
+	/**
+	 * This method converts the given byte arrays to a boolean.
+	 * 
+	 * @param input The bytes to convert
+	 * @return The result of the conversion
+	 * @throws PrimitiveConversionException If an error occurs while converting the
+	 *                                      bytes
+	 */
+	private static boolean bytesToBoolean(byte[] input) throws PrimitiveConversionException {
+		byte[] bytes;
+		try {
+			bytes = ByteUtils.resize(input, 1);
+		} catch (InputException exception) {
+			throw new PrimitiveConversionException("An error occured while resizing the given byte array!", exception);
+		}
+		byte data = bytes[0];
+		switch (data & 0x1) {
+			case 1:
+				return true;
+			default:
+				return false;
+		}
+	}
+
+	/**
+	 * This method converts the given byte arrays to a byte.
+	 * 
+	 * @param input The bytes to convert
+	 * @return The result of the conversion
+	 * @throws PrimitiveConversionException If an error occurs while converting the
+	 *                                      bytes
+	 */
+	private static byte bytesToByte(byte[] input) throws PrimitiveConversionException {
+		byte[] bytes;
+		try {
+			bytes = ByteUtils.resize(input, 1);
+		} catch (InputException exception) {
+			throw new PrimitiveConversionException("An error occured while resizing the given byte array!", exception);
+		}
+		byte data = (byte) (bytes[0] & 0xFF);
+		return data;
+	}
+
+	/**
+	 * This method converts the given byte arrays to a short.
+	 * 
+	 * @param input The bytes to convert
+	 * @return The result of the conversion
+	 * @throws PrimitiveConversionException If an error occurs while converting the
+	 *                                      bytes
+	 */
+	private static short bytesToShort(byte[] input) throws PrimitiveConversionException {
+		byte[] bytes;
+		try {
+			bytes = ByteUtils.resize(input, 2);
+		} catch (InputException exception) {
+			throw new PrimitiveConversionException("An error occured while resizing the given byte array!", exception);
+		}
+		short result = (short) ((bytes[0] & 0xFF) << 8 | (bytes[1] & 0xFF));
+		return result;
+	}
+
+	/**
+	 * This method converts the given byte arrays to an integer.
+	 * 
+	 * @param input The bytes to convert
+	 * @return The result of the conversion
+	 * @throws PrimitiveConversionException If an error occurs while converting the
+	 *                                      bytes
+	 */
+	private static int bytesToInteger(byte[] input) throws PrimitiveConversionException {
+		byte[] bytes;
+		try {
+			bytes = ByteUtils.resize(input, 4);
+		} catch (InputException exception) {
+			throw new PrimitiveConversionException("An error occured while resizing the given byte array!", exception);
+		}
+		int result = (bytes[0] & 0xFF) << 24 | (bytes[1] & 0xFF) << 16 | (bytes[2] & 0xFF) << 8 | (bytes[3] & 0xFF);
+		return result;
+	}
+
+	/**
+	 * This method converts the given byte arrays to a long.
+	 * 
+	 * @param input The bytes to convert
+	 * @return The result of the conversion
+	 * @throws PrimitiveConversionException If an error occurs while converting the
+	 *                                      bytes
+	 */
+	private static long bytesToLong(byte[] input) throws PrimitiveConversionException {
+		byte[] bytes;
+		try {
+			bytes = ByteUtils.resize(input, 8);
+		} catch (InputException exception) {
+			throw new PrimitiveConversionException("An error occured while resizing the given byte array!", exception);
+		}
+		long result = ((long) (bytes[0] & 0xFF) << 56) | ((long) (bytes[1] & 0xFF) << 48) | ((long) (bytes[2] & 0xFF) << 40) | ((long) (bytes[3] & 0xFF) << 32) | ((long) (bytes[4] & 0xFF) << 24) | ((long) (bytes[5] & 0xFF) << 16) | ((long) (bytes[6] & 0xFF) << 8) | ((long) bytes[7] & 0xFF);
+		return result;
+	}
+
+	/**
+	 * This method converts the given byte arrays to a float.
+	 * 
+	 * @param input The bytes to convert
+	 * @return The result of the conversion
+	 * @throws PrimitiveConversionException If an error occurs while converting the
+	 *                                      bytes
+	 */
+	private static float bytesToFloat(byte[] input) throws PrimitiveConversionException {
+		int asInteger = bytesToInteger(input);
+		float result = Float.intBitsToFloat(asInteger);
+		return result;
+	}
+
+	/**
+	 * This method converts the given byte arrays to a double.
+	 * 
+	 * @param input The bytes to convert
+	 * @return The result of the conversion
+	 * @throws PrimitiveConversionException If an error occurs while converting the
+	 *                                      bytes
+	 */
+	private static double bytesToDouble(byte[] input) throws PrimitiveConversionException {
+		long asLong = bytesToLong(input);
+		double result = Double.longBitsToDouble(asLong);
+		return result;
+	}
+
+	/**
+	 * This method converts the given byte arrays to a char.
+	 * 
+	 * @param input The bytes to convert
+	 * @return The result of the conversion
+	 * @throws PrimitiveConversionException If an error occurs while converting the
+	 *                                      bytes
+	 */
+	private static char bytesToCharacter(byte[] input) throws PrimitiveConversionException {
+		byte[] bytes;
+		try {
+			bytes = ByteUtils.resize(input, 2);
+		} catch (InputException exception) {
+			throw new PrimitiveConversionException("An error occured while resizing the given byte array!", exception);
+		}
+		char result = (char) ((bytes[0] & 0xFF) << 8 | (bytes[1] & 0xFF));
+		return result;
+	}
 }
