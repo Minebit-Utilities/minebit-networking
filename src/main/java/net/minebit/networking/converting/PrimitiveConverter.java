@@ -182,7 +182,7 @@ public final class PrimitiveConverter {
 	 * @throws PrimitiveConversionException If an error occurs while converting the
 	 *                                      bytes
 	 */
-	public static Object convertToObject(byte[] input, Class<?> objectClass) throws PrimitiveConversionException {
+	public static Object convertToPrimitive(byte[] input, Class<?> objectClass) throws PrimitiveConversionException {
 		if (input == null) {
 			throw new PrimitiveConversionException("The given input cannot be NULL!");
 		}
