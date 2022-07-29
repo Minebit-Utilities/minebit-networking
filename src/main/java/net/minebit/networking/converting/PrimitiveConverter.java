@@ -68,14 +68,8 @@ public final class PrimitiveConverter {
 	 * @return The result of the conversion
 	 */
 	private static byte[] booleanToBytes(boolean input) {
-		byte[] result = new byte[1];
-		if (input == true) {
-			result[0] = 1;
-		} else {
-			result[0] = 0;
-		}
-		return result;
-	}
+	    return input ? new byte[]{1} : new byte[]{0};
+    }
 
 	/**
 	 * This method converts the given byte to an array of bytes.
@@ -84,9 +78,9 @@ public final class PrimitiveConverter {
 	 * @return The result of the conversion
 	 */
 	private static byte[] byteToBytes(byte input) {
-		byte[] result = new byte[1];
-		result[0] = input;
-		return result;
+        return new byte[]{
+            input
+        };
 	}
 
 	/**
@@ -96,10 +90,10 @@ public final class PrimitiveConverter {
 	 * @return The result of the conversion
 	 */
 	private static byte[] shortToBytes(short input) {
-		byte[] result = new byte[2];
-		result[0] = (byte) (input >> 8);
-		result[1] = (byte) input;
-		return result;
+        return new byte[]{
+            (byte) (input >> 8),
+            (byte) input
+        };
 	}
 
 	/**
@@ -109,12 +103,12 @@ public final class PrimitiveConverter {
 	 * @return The result of the conversion
 	 */
 	private static byte[] integerToBytes(int input) {
-		byte[] result = new byte[4];
-		result[0] = (byte) (input >> 24);
-		result[1] = (byte) (input >> 16);
-		result[2] = (byte) (input >> 8);
-		result[3] = (byte) input;
-		return result;
+        return new byte[]{
+            (byte) (input >> 24),
+            (byte) (input >> 16),
+            (byte) (input >> 8),
+            (byte) input
+        };
 	}
 
 	/**
@@ -124,16 +118,16 @@ public final class PrimitiveConverter {
 	 * @return The result of the conversion
 	 */
 	private static byte[] longToBytes(long input) {
-		byte[] result = new byte[8];
-		result[0] = (byte) (input >> 56);
-		result[1] = (byte) (input >> 48);
-		result[2] = (byte) (input >> 40);
-		result[3] = (byte) (input >> 32);
-		result[4] = (byte) (input >> 24);
-		result[5] = (byte) (input >> 16);
-		result[6] = (byte) (input >> 8);
-		result[7] = (byte) input;
-		return result;
+        return new byte[]{
+            (byte) (input >> 56),
+            (byte) (input >> 48),
+            (byte) (input >> 40),
+            (byte) (input >> 32),
+            (byte) (input >> 24),
+            (byte) (input >> 16),
+            (byte) (input >> 8),
+            (byte) input
+        };
 	}
 
 	/**
@@ -144,8 +138,7 @@ public final class PrimitiveConverter {
 	 */
 	private static byte[] floatToBytes(float input) {
 		int asInteger = Float.floatToIntBits(input);
-		byte[] result = integerToBytes(asInteger);
-		return result;
+		return integerToBytes(asInteger);
 	}
 
 	/**
@@ -156,8 +149,7 @@ public final class PrimitiveConverter {
 	 */
 	private static byte[] doubleToBytes(double input) {
 		long asLong = Double.doubleToLongBits(input);
-		byte[] result = longToBytes(asLong);
-		return result;
+		return longToBytes(asLong);
 	}
 
 	/**
@@ -167,10 +159,10 @@ public final class PrimitiveConverter {
 	 * @return The result of the conversion
 	 */
 	private static byte[] characterToBytes(char input) {
-		byte[] result = new byte[2];
-		result[0] = (byte) (input >> 8);
-		result[1] = (byte) input;
-		return result;
+        return new byte[]{
+            (byte) (input >> 8),
+            (byte) input
+        };
 	}
 
 	/**
@@ -263,8 +255,7 @@ public final class PrimitiveConverter {
 		} catch (InputException exception) {
 			throw new PrimitiveConversionException("An error occured while resizing the given byte array!", exception);
 		}
-		byte data = (byte) (bytes[0] & 0xFF);
-		return data;
+	    return (byte) (bytes[0] & 0xFF);
 	}
 
 	/**
@@ -282,8 +273,7 @@ public final class PrimitiveConverter {
 		} catch (InputException exception) {
 			throw new PrimitiveConversionException("An error occured while resizing the given byte array!", exception);
 		}
-		short result = (short) ((bytes[0] & 0xFF) << 8 | (bytes[1] & 0xFF));
-		return result;
+		return (short) ((bytes[0] & 0xFF) << 8 | (bytes[1] & 0xFF));
 	}
 
 	/**
@@ -301,8 +291,11 @@ public final class PrimitiveConverter {
 		} catch (InputException exception) {
 			throw new PrimitiveConversionException("An error occured while resizing the given byte array!", exception);
 		}
-		int result = (bytes[0] & 0xFF) << 24 | (bytes[1] & 0xFF) << 16 | (bytes[2] & 0xFF) << 8 | (bytes[3] & 0xFF);
-		return result;
+		return 
+            (bytes[0] & 0xFF) << 24 | 
+            (bytes[1] & 0xFF) << 16 | 
+            (bytes[2] & 0xFF) << 8 | 
+            (bytes[3] & 0xFF);
 	}
 
 	/**
@@ -320,8 +313,15 @@ public final class PrimitiveConverter {
 		} catch (InputException exception) {
 			throw new PrimitiveConversionException("An error occured while resizing the given byte array!", exception);
 		}
-		long result = ((long) (bytes[0] & 0xFF) << 56) | ((long) (bytes[1] & 0xFF) << 48) | ((long) (bytes[2] & 0xFF) << 40) | ((long) (bytes[3] & 0xFF) << 32) | ((long) (bytes[4] & 0xFF) << 24) | ((long) (bytes[5] & 0xFF) << 16) | ((long) (bytes[6] & 0xFF) << 8) | ((long) bytes[7] & 0xFF);
-		return result;
+		return 
+            ((long) (bytes[0] & 0xFF) << 56) | 
+            ((long) (bytes[1] & 0xFF) << 48) | 
+            ((long) (bytes[2] & 0xFF) << 40) | 
+            ((long) (bytes[3] & 0xFF) << 32) | 
+            ((long) (bytes[4] & 0xFF) << 24) | 
+            ((long) (bytes[5] & 0xFF) << 16) | 
+            ((long) (bytes[6] & 0xFF) << 8) | 
+            ((long) bytes[7] & 0xFF);
 	}
 
 	/**
@@ -334,8 +334,7 @@ public final class PrimitiveConverter {
 	 */
 	private static float bytesToFloat(byte[] input) throws PrimitiveConversionException {
 		int asInteger = bytesToInteger(input);
-		float result = Float.intBitsToFloat(asInteger);
-		return result;
+		return Float.intBitsToFloat(asInteger);
 	}
 
 	/**
@@ -348,8 +347,7 @@ public final class PrimitiveConverter {
 	 */
 	private static double bytesToDouble(byte[] input) throws PrimitiveConversionException {
 		long asLong = bytesToLong(input);
-		double result = Double.longBitsToDouble(asLong);
-		return result;
+		return Double.longBitsToDouble(asLong);
 	}
 
 	/**
@@ -367,7 +365,6 @@ public final class PrimitiveConverter {
 		} catch (InputException exception) {
 			throw new PrimitiveConversionException("An error occured while resizing the given byte array!", exception);
 		}
-		char result = (char) ((bytes[0] & 0xFF) << 8 | (bytes[1] & 0xFF));
-		return result;
+		return (char) ((bytes[0] & 0xFF) << 8 | (bytes[1] & 0xFF));
 	}
 }
