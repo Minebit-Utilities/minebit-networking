@@ -2,7 +2,6 @@ package net.minebit.networking.converting;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 
 import net.minebit.networking.exceptions.conversions.ObjectConversionException;
 import net.minebit.networking.exceptions.conversions.PrimitiveConversionException;
@@ -106,7 +105,7 @@ public final class ObjectConverter {
 		} catch (NoSuchMethodException exception) {
 			throw new InputException("The object conversion method is missing from the given class!", exception);
 		}
-		if ((byteMethod.getModifiers() & (Modifier.STATIC | Modifier.PUBLIC)) != 0x9 || byteMethod.getReturnType() != byte[].class) {
+		if ((byteMethod.getModifiers() & 0x9) != 0x9 || byteMethod.getReturnType() != byte[].class) {
 			throw new InputException("The object conversion method of the given class doesn't have the correct modifiers or return type!");
 		}
 		Method objectMethod;
@@ -115,7 +114,7 @@ public final class ObjectConverter {
 		} catch (NoSuchMethodException exception) {
 			throw new InputException("The byte conversion method is missing from the given class!", exception);
 		}
-		if ((objectMethod.getModifiers() & (Modifier.STATIC | Modifier.PUBLIC)) != 0x9 || objectMethod.getReturnType() != inputClass) {
+		if ((objectMethod.getModifiers() & 0x9) != 0x9 || objectMethod.getReturnType() != inputClass) {
 			throw new InputException("The byte conversion method of the given class doesn't have the correct modifiers or return type!");
 		}
 		Pair<Method, Method> result = new Pair<Method, Method>(byteMethod, objectMethod);

@@ -68,8 +68,8 @@ public final class PrimitiveConverter {
 	 * @return The result of the conversion
 	 */
 	private static byte[] booleanToBytes(boolean input) {
-	    return input ? new byte[]{1} : new byte[]{0};
-    }
+		return input ? new byte[] { 1 } : new byte[] { 0 };
+	}
 
 	/**
 	 * This method converts the given byte to an array of bytes.
@@ -78,9 +78,7 @@ public final class PrimitiveConverter {
 	 * @return The result of the conversion
 	 */
 	private static byte[] byteToBytes(byte input) {
-        return new byte[]{
-            input
-        };
+		return new byte[] { input };
 	}
 
 	/**
@@ -90,10 +88,7 @@ public final class PrimitiveConverter {
 	 * @return The result of the conversion
 	 */
 	private static byte[] shortToBytes(short input) {
-        return new byte[]{
-            (byte) (input >> 8),
-            (byte) input
-        };
+		return new byte[] { (byte) (input >> 8), (byte) input };
 	}
 
 	/**
@@ -103,12 +98,7 @@ public final class PrimitiveConverter {
 	 * @return The result of the conversion
 	 */
 	private static byte[] integerToBytes(int input) {
-        return new byte[]{
-            (byte) (input >> 24),
-            (byte) (input >> 16),
-            (byte) (input >> 8),
-            (byte) input
-        };
+		return new byte[] { (byte) (input >> 24), (byte) (input >> 16), (byte) (input >> 8), (byte) input };
 	}
 
 	/**
@@ -118,16 +108,7 @@ public final class PrimitiveConverter {
 	 * @return The result of the conversion
 	 */
 	private static byte[] longToBytes(long input) {
-        return new byte[]{
-            (byte) (input >> 56),
-            (byte) (input >> 48),
-            (byte) (input >> 40),
-            (byte) (input >> 32),
-            (byte) (input >> 24),
-            (byte) (input >> 16),
-            (byte) (input >> 8),
-            (byte) input
-        };
+		return new byte[] { (byte) (input >> 56), (byte) (input >> 48), (byte) (input >> 40), (byte) (input >> 32), (byte) (input >> 24), (byte) (input >> 16), (byte) (input >> 8), (byte) input };
 	}
 
 	/**
@@ -159,10 +140,7 @@ public final class PrimitiveConverter {
 	 * @return The result of the conversion
 	 */
 	private static byte[] characterToBytes(char input) {
-        return new byte[]{
-            (byte) (input >> 8),
-            (byte) input
-        };
+		return new byte[] { (byte) (input >> 8), (byte) input };
 	}
 
 	/**
@@ -181,35 +159,35 @@ public final class PrimitiveConverter {
 		if (objectClass == null) {
 			throw new PrimitiveConversionException("The given class cannot be NULL!");
 		}
-		if (objectClass.equals(Boolean.class)) {
+		if (objectClass.equals(Boolean.class) || objectClass.equals(Boolean.TYPE)) {
 			boolean result = bytesToBoolean(input);
 			return new Boolean(result);
 		}
-		if (objectClass.equals(Byte.class)) {
+		if (objectClass.equals(Byte.class) || objectClass.equals(Byte.TYPE)) {
 			byte result = bytesToByte(input);
 			return new Byte(result);
 		}
-		if (objectClass.equals(Short.class)) {
+		if (objectClass.equals(Short.class) || objectClass.equals(Short.TYPE)) {
 			short result = bytesToShort(input);
 			return new Short(result);
 		}
-		if (objectClass.equals(Integer.class)) {
+		if (objectClass.equals(Integer.class) || objectClass.equals(Integer.TYPE)) {
 			int result = bytesToInteger(input);
 			return new Integer(result);
 		}
-		if (objectClass.equals(Long.class)) {
+		if (objectClass.equals(Long.class) || objectClass.equals(Long.TYPE)) {
 			long result = bytesToLong(input);
 			return new Long(result);
 		}
-		if (objectClass.equals(Float.class)) {
+		if (objectClass.equals(Float.class) || objectClass.equals(Float.TYPE)) {
 			float result = bytesToFloat(input);
 			return new Float(result);
 		}
-		if (objectClass.equals(Double.class)) {
+		if (objectClass.equals(Double.class) || objectClass.equals(Double.TYPE)) {
 			double result = bytesToDouble(input);
 			return new Double(result);
 		}
-		if (objectClass.equals(Character.class)) {
+		if (objectClass.equals(Character.class) || objectClass.equals(Character.TYPE)) {
 			char result = bytesToCharacter(input);
 			return new Character(result);
 		}
@@ -255,7 +233,7 @@ public final class PrimitiveConverter {
 		} catch (InputException exception) {
 			throw new PrimitiveConversionException("An error occured while resizing the given byte array!", exception);
 		}
-	    return (byte) (bytes[0] & 0xFF);
+		return (byte) (bytes[0] & 0xFF);
 	}
 
 	/**
@@ -291,11 +269,7 @@ public final class PrimitiveConverter {
 		} catch (InputException exception) {
 			throw new PrimitiveConversionException("An error occured while resizing the given byte array!", exception);
 		}
-		return 
-            (bytes[0] & 0xFF) << 24 | 
-            (bytes[1] & 0xFF) << 16 | 
-            (bytes[2] & 0xFF) << 8 | 
-            (bytes[3] & 0xFF);
+		return (bytes[0] & 0xFF) << 24 | (bytes[1] & 0xFF) << 16 | (bytes[2] & 0xFF) << 8 | (bytes[3] & 0xFF);
 	}
 
 	/**
@@ -313,15 +287,7 @@ public final class PrimitiveConverter {
 		} catch (InputException exception) {
 			throw new PrimitiveConversionException("An error occured while resizing the given byte array!", exception);
 		}
-		return 
-            ((long) (bytes[0] & 0xFF) << 56) | 
-            ((long) (bytes[1] & 0xFF) << 48) | 
-            ((long) (bytes[2] & 0xFF) << 40) | 
-            ((long) (bytes[3] & 0xFF) << 32) | 
-            ((long) (bytes[4] & 0xFF) << 24) | 
-            ((long) (bytes[5] & 0xFF) << 16) | 
-            ((long) (bytes[6] & 0xFF) << 8) | 
-            ((long) bytes[7] & 0xFF);
+		return ((long) (bytes[0] & 0xFF) << 56) | ((long) (bytes[1] & 0xFF) << 48) | ((long) (bytes[2] & 0xFF) << 40) | ((long) (bytes[3] & 0xFF) << 32) | ((long) (bytes[4] & 0xFF) << 24) | ((long) (bytes[5] & 0xFF) << 16) | ((long) (bytes[6] & 0xFF) << 8) | ((long) bytes[7] & 0xFF);
 	}
 
 	/**
@@ -366,5 +332,22 @@ public final class PrimitiveConverter {
 			throw new PrimitiveConversionException("An error occured while resizing the given byte array!", exception);
 		}
 		return (char) ((bytes[0] & 0xFF) << 8 | (bytes[1] & 0xFF));
+	}
+
+	/**
+	 * This method returns whether the given class represents a primitive type.
+	 * 
+	 * @param inputClass The class to check
+	 * @return Whether the given class represents a primitive type
+	 * @throws If the given class is null
+	 */
+	public static boolean representsPrimitive(Class<?> inputClass) throws InputException {
+		if (inputClass == null) {
+			throw new InputException("The given class cannot be NULL!");
+		}
+		if (inputClass.isPrimitive()) {
+			return true;
+		}
+		return inputClass.equals(Boolean.class) || inputClass.equals(Byte.class) || inputClass.equals(Short.class) || inputClass.equals(Integer.class) || inputClass.equals(Long.class) || inputClass.equals(Float.class) || inputClass.equals(Double.class) || inputClass.equals(Character.class);
 	}
 }
