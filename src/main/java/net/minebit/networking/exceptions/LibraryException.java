@@ -11,7 +11,7 @@ package net.minebit.networking.exceptions;
 public class LibraryException extends Exception {
 
 	/**
-	 * Constructs a new {@link MinebitNetworkingException} without an exception
+	 * Constructs a new {@link LibraryException} without an exception
 	 * message and a cause.
 	 */
 	public LibraryException() {
@@ -19,7 +19,7 @@ public class LibraryException extends Exception {
 	}
 
 	/**
-	 * Constructs a new {@link MinebitNetworkingException} with a specified
+	 * Constructs a new {@link LibraryException} with a specified
 	 * exception message but without a specific cause.
 	 * 
 	 * @param message The message of the exception.
@@ -29,7 +29,7 @@ public class LibraryException extends Exception {
 	}
 
 	/**
-	 * Constructs a new {@link MinebitNetworkingException} without a message but
+	 * Constructs a new {@link LibraryException} without a message but
 	 * with the specified cause.
 	 * 
 	 * @param cause The cause of the exception.
@@ -40,7 +40,7 @@ public class LibraryException extends Exception {
 	}
 
 	/**
-	 * Constructs a new {@link MinebitNetworkingException} with a specified
+	 * Constructs a new {@link LibraryException} with a specified
 	 * exception message and cause.
 	 * 
 	 * @param message The message of the exception.
