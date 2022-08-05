@@ -1,26 +1,26 @@
-package net.minebit.networking.exceptions.coders;
+package net.minebit.networking.exceptions.requests;
 
 /**
- * {@link RequestCoderException} is a {@link CoderException} that is thrown whenever
- * an error occurs concerning the encoding/decoding of a request.
+ * {@link RequestCoderException} is a {@link RequestException} that is thrown
+ * whenever an error occurs concerning the encoding/decoding of a request.
  * 
  * @author Aggelowe
  * @since 0.1
  *
  */
-public class RequestCoderException extends CoderException {
+public class RequestCoderException extends RequestException {
 
 	/**
-	 * Constructs a new {@link RequestCoderException} without an exception message and a
-	 * cause.
+	 * Constructs a new {@link RequestCoderException} without an exception message
+	 * and a cause.
 	 */
 	public RequestCoderException() {
 		super();
 	}
 
 	/**
-	 * Constructs a new {@link RequestCoderException} with a specified exception message
-	 * but without a specific cause.
+	 * Constructs a new {@link RequestCoderException} with a specified exception
+	 * message but without a specific cause.
 	 * 
 	 * @param message The message of the exception.
 	 */
@@ -40,8 +40,8 @@ public class RequestCoderException extends CoderException {
 	}
 
 	/**
-	 * Constructs a new {@link RequestCoderException} with a specified exception message
-	 * and cause.
+	 * Constructs a new {@link RequestCoderException} with a specified exception
+	 * message and cause.
 	 * 
 	 * @param message The message of the exception.
 	 * @param cause   The cause of the exception.
