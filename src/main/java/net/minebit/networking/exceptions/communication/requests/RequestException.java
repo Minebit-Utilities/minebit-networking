@@ -1,4 +1,4 @@
-package net.minebit.networking.exceptions.requests;
+package net.minebit.networking.exceptions.communication.requests;
 
 import net.minebit.networking.exceptions.LibraryException;
 
