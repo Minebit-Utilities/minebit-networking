@@ -1,6 +1,6 @@
 package net.minebit.networking.communication;
 
-import java.util.List;
+import java.util.Map;
 
 import net.minebit.networking.exceptions.communication.SendableException;
 
@@ -18,18 +18,17 @@ public abstract class AbstractSendable {
 	 * This constructor constructs a new {@link AbstractSendable}.
 	 */
 	public AbstractSendable() {
-
 	}
 
 	/**
 	 * This constructor constructs a new {@link AbstractSendable} and loads the
-	 * sendable's data from the given object list.
+	 * sendable's data from the given map.
 	 * 
-	 * @param data The object list to load the data from
+	 * @param data The map to load the data from
 	 * @throws SendableException If an error occurs while loading the sendable's
 	 *                           data.
 	 */
-	public AbstractSendable(List<Object> data) throws SendableException {
+	public AbstractSendable(Map<String, Object> data) throws SendableException {
 		this.load(data);
 	}
 
@@ -46,12 +45,12 @@ public abstract class AbstractSendable {
 	}
 
 	/**
-	 * This method loads the data of the sendable from the given list of objects.
+	 * This method loads the data of the sendable from the given map.
 	 * 
-	 * @param input The objects to load the data from
+	 * @param input The map to load the data from
 	 * @throws SendableException If an error occurs while the data are being loaded
 	 */
-	public abstract void load(List<Object> input) throws SendableException;
+	public abstract void load(Map<String, Object> input) throws SendableException;
 
 	/**
 	 * This method loads the data of the sendable from the given bytes.
@@ -62,12 +61,12 @@ public abstract class AbstractSendable {
 	public abstract void load(byte[] input) throws SendableException;
 
 	/**
-	 * This method returns this sendable's data as a list of objects.
+	 * This method returns this sendable's data as a map.
 	 * 
 	 * @return The sendable's data
 	 * @throws SendableException If an error occurs while getting the data.
 	 */
-	public abstract List<Object> asObjectList() throws SendableException;
+	public abstract Map<String, Object> asMap() throws SendableException;
 
 	/**
 	 * This method returns this sendable's data as a byte array.
