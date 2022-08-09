@@ -1,16 +1,16 @@
 package net.minebit.networking.exceptions.communication.requests;
 
-import net.minebit.networking.exceptions.LibraryException;
+import net.minebit.networking.exceptions.communication.SendableException;
 
 /**
- * {@link RequestException} is a {@link LibraryException} that is thrown whenever
- * an error occurs concerning the encoding/decoding of a request/response.
+ * {@link RequestException} is a {@link SendableException} that is thrown whenever
+ * an error occurs concerning a request.
  * 
  * @author Aggelowe
  * @since 0.1
  *
  */
-public class RequestException extends LibraryException {
+public class RequestException extends SendableException {
 
 	/**
 	 * Constructs a new {@link RequestException} without an exception message and a
