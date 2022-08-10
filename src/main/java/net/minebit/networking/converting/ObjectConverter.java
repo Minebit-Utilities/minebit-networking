@@ -4,7 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import net.minebit.networking.exceptions.conversions.ObjectConversionException;
-import net.minebit.networking.exceptions.conversions.PrimitiveConversionException;
 import net.minebit.networking.exceptions.general.InputException;
 import net.minebit.networking.miscellaneous.Pair;
 
@@ -17,14 +16,16 @@ import net.minebit.networking.miscellaneous.Pair;
  */
 public final class ObjectConverter {
 
+	private ObjectConverter() {
+	}
+
 	/**
 	 * This method returns the given primitive as a byte array.
 	 * 
 	 * @param input The primitive to convert to bytes
 	 * @return The result of the conversion
-	 * @throws ObjectConversionException
-	 * @throws PrimitiveConversionException If an error occurs while converting the
-	 *                                      primitive.
+	 * @throws ObjectConversionException If an error occurs while converting the
+	 *                                   object.
 	 */
 	public static byte[] convertToBytes(Object input) throws ObjectConversionException {
 		if (input == null) {
@@ -56,9 +57,8 @@ public final class ObjectConverter {
 	 * @param input       The bytes to convert to an object
 	 * @param objectClass The class of the output object
 	 * @return The result of the conversion
-	 * @throws ObjectConversionException 
-	 * @throws PrimitiveConversionException If an error occurs while converting the
-	 *                                      bytes
+	 * @throws ObjectConversionExceptionv If an error occurs while converting the
+	 *                                    bytes
 	 */
 	public static Object convertToObject(byte[] input, Class<?> objectClass) throws ObjectConversionException {
 		if (input == null) {

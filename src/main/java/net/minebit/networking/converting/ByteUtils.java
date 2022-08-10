@@ -12,6 +12,9 @@ import net.minebit.networking.exceptions.general.InputException;
  */
 public final class ByteUtils {
 
+	private ByteUtils() {
+	}
+
 	/**
 	 * This method converts the given byte array to another byte array of the given
 	 * length.

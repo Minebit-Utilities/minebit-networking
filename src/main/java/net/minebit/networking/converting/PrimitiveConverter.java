@@ -13,6 +13,9 @@ import net.minebit.networking.exceptions.general.InputException;
  */
 public final class PrimitiveConverter {
 
+	private PrimitiveConverter() {
+	}
+
 	/**
 	 * This method returns the given primitive as a byte array.
 	 * 

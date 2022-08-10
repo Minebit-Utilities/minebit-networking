@@ -15,6 +15,9 @@ import net.minebit.networking.exceptions.general.InputException;
  */
 public final class ConversionHandler {
 
+	private ConversionHandler() {
+	}
+
 	/**
 	 * This method converts the given object or primitive to a byte array.
 	 * 
@@ -45,7 +48,7 @@ public final class ConversionHandler {
 		}
 		return ObjectConverter.convertToBytes(input);
 	}
-	
+
 	public static Object toObject(byte[] input, Class<?> objectClass) throws ConversionException {
 		if (input == null) {
 			throw new ConversionException("The given input cannot be NULL!");
