@@ -7,11 +7,11 @@ package net.minebit.networking.miscellaneous;
  * @author Aggelowe
  * @since 0.1
  *
- * @param <FirstType>  The type of the first object.
- * @param <SecondType> The type of the second object.
+ * @param <FirstType>  The type of the first object
+ * @param <SecondType> The type of the second object
  * 
  */
-public final class Pair<FirstType, SecondType> {
+public class Pair<FirstType, SecondType> {
 
 	private final FirstType firstObject;
 	private final SecondType secondObject;
@@ -44,27 +44,6 @@ public final class Pair<FirstType, SecondType> {
 	 */
 	public SecondType getSecondObject() {
 		return secondObject;
-	}
-
-	/**
-	 * This method indicates whether the given object is the same as this pair or,
-	 * if it is a pair, it contains the same objects as this pair.
-	 * 
-	 * @return Whether the given object is 'the same'.
-	 * @see Object#equals(Object)
-	 */
-	@Override
-	public boolean equals(Object input) {
-		if (this == input) {
-			return true;
-		}
-		if (input instanceof Pair) {
-			Pair<?, ?> pair = (Pair<?, ?>) input;
-			if (this.firstObject == pair.getFirstObject() && this.secondObject == pair.getSecondObject()) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	/**
