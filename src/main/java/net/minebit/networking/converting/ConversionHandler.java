@@ -71,7 +71,7 @@ public final class ConversionHandler {
 		if (representsPrimitive) {
 			return PrimitiveConverter.convertToPrimitive(input, objectClass);
 		}
-		return ObjectConverter.convertToObject(input, objectClass);
+		return ObjectConverter.convertToObject(input);
 	}
 
 }
