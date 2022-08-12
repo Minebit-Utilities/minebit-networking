@@ -18,30 +18,7 @@ public abstract class AbstractSendable {
 	 * This constructor constructs a new {@link AbstractSendable}.
 	 */
 	public AbstractSendable() {
-	}
-
-	/**
-	 * This constructor constructs a new {@link AbstractSendable} and loads the
-	 * sendable's data from the given map.
-	 * 
-	 * @param data The map to load the data from
-	 * @throws SendableException If an error occurs while loading the sendable's
-	 *                           data.
-	 */
-	public AbstractSendable(Map<String, Object> data) throws SendableException {
-		this.load(data);
-	}
-
-	/**
-	 * This constructor constructs a new {@link AbstractSendable} and loads the
-	 * sendable's data from the byte array
-	 * 
-	 * @param data The bytes to load the data from
-	 * @throws SendableException If an error occurs while loading the sendable's
-	 *                           data.
-	 */
-	public AbstractSendable(byte[] data) throws SendableException {
-		this.load(data);
+		
 	}
 
 	/**
