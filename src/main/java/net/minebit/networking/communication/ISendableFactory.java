@@ -7,6 +7,8 @@ import net.minebit.networking.exceptions.communication.SendableException;
 /**
  * This interface defines how an {@link AbstractSendable} can be constructed.
  * 
+ * @param <SendableType> The type of sendable the factory constructs
+ * 
  * @author Aggelowe
  * @since 0.1
  *

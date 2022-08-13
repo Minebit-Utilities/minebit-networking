@@ -23,11 +23,8 @@ public class GetRequest extends AbstractRequest {
 
 	/**
 	 * This constructor constructs a new {@link GetRequest}
-	 * 
-	 * @param conversationId The conversation id of the request
 	 */
-	public GetRequest(long conversationId) {
-		super(conversationId);
+	public GetRequest() {
 	}
 
 	/**
