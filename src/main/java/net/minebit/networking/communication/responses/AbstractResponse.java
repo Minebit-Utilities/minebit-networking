@@ -17,6 +17,7 @@ public abstract class AbstractResponse extends AbstractSendable {
 	 * This constructor constructs a new {@link AbstractResponse}
 	 */
 	public AbstractResponse() {
+		
 	}
 
 	private static final SendableRegistry<AbstractResponse> RESPONSE_REGISTRY = new SendableRegistry<>();

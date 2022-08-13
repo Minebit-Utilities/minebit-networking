@@ -12,13 +12,18 @@ import net.minebit.networking.communication.SendableRegistry;
  *
  */
 public abstract class AbstractRequest extends AbstractSendable {
-	
+
+	private final long conversationId;
+
 	/**
 	 * This constructor constructs a new {@link AbstractRequest}
+	 * 
+	 * @param conversationId The conversation id of the request
 	 */
-	public AbstractRequest() {
+	public AbstractRequest(long conversationId) {
+		this.conversationId = conversationId;
 	}
-	
+
 	private static final SendableRegistry<AbstractRequest> REQUEST_REGISTRY = new SendableRegistry<>();
 
 	/**
@@ -28,6 +33,15 @@ public abstract class AbstractRequest extends AbstractSendable {
 	 */
 	public static SendableRegistry<AbstractRequest> getRequestRegistry() {
 		return AbstractRequest.REQUEST_REGISTRY;
+	}
+
+	/**
+	 * This method returns the requests conversation id.
+	 * 
+	 * @return
+	 */
+	public long getConversationId() {
+		return conversationId;
 	}
 
 }
