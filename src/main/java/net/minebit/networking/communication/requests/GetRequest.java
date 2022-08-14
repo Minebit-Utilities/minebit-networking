@@ -1,11 +1,9 @@
 package net.minebit.networking.communication.requests;
 
-import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
 import net.minebit.networking.converting.ConversionHandler;
-import net.minebit.networking.exceptions.communication.SendableException;
 import net.minebit.networking.exceptions.communication.requests.RequestException;
 import net.minebit.networking.exceptions.conversions.ConversionException;
 
@@ -31,10 +29,10 @@ public class GetRequest extends AbstractRequest {
 	 * This method loads the data of the get request from the given map.
 	 * 
 	 * @param input The map to load the data from
-	 * @throws SendableException If an error occurs while the data are being loaded
+	 * @throws RequestException 
 	 */
 	@Override
-	public void load(Map<String, Object> input) throws SendableException {
+	public void load(Map<String, Object> input) throws RequestException {
 		if (input == null) {
 			throw new RequestException("The given map cannot be NULL!");
 		}
@@ -54,10 +52,10 @@ public class GetRequest extends AbstractRequest {
 	 * This method loads the data of the get request from the bytes.
 	 * 
 	 * @param input The map to load the data from
-	 * @throws SendableException If an error occurs while the data are being loaded
+	 * @throws RequestException If an error occurs while the data are being loaded
 	 */
 	@Override
-	public void load(byte[] input) throws SendableException {
+	public void load(byte[] input) throws RequestException {
 		if (input == null) {
 			throw new RequestException("The given byte array cannot be NULL!");
 		}
@@ -65,7 +63,7 @@ public class GetRequest extends AbstractRequest {
 		try {
 			value = (String) ConversionHandler.toObject(input, String.class);
 		} catch (ConversionException exception) {
-			throw new RequestException("An error occured while converting the 'value' into bytes!");
+			throw new RequestException("An error occured while converting the 'value' into bytes!", exception);
 		}
 		this.value = value;
 	}
@@ -74,10 +72,10 @@ public class GetRequest extends AbstractRequest {
 	 * This method returns this get requests data as a map.
 	 * 
 	 * @return The requests data
-	 * @throws SendableException If an error occurs while getting the data.
+	 * @throws RequestException If an error occurs while getting the data.
 	 */
 	@Override
-	public Map<String, Object> asMap() throws SendableException {
+	public Map<String, Object> asMap() throws RequestException {
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("value", this.value);
 		return result;
@@ -87,19 +85,17 @@ public class GetRequest extends AbstractRequest {
 	 * This method returns this get requests data as a byte array.
 	 * 
 	 * @return The request's data
-	 * @throws SendableException If an error occurs while getting the data.
+	 * @throws RequestException If an error occurs while getting the data.
 	 */
 	@Override
-	public byte[] asBytes() throws SendableException {
+	public byte[] asBytes() throws RequestException {
 		byte[] valueBytes = null;
 		try {
 			valueBytes = ConversionHandler.toBytes(this.value);
 		} catch (ConversionException exception) {
 			throw new RequestException("An error occured while converting the 'value' string into bytes!", exception);
 		}
-		ByteBuffer buffer = ByteBuffer.allocate(valueBytes.length);
-		buffer.put(valueBytes);
-		return buffer.array();
+		return valueBytes;
 	}
 
 	/**

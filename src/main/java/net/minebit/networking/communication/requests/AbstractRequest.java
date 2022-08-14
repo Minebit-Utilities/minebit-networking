@@ -1,9 +1,12 @@
 package net.minebit.networking.communication.requests;
 
+import java.util.Map;
+
 import net.minebit.networking.communication.AbstractSendable;
 import net.minebit.networking.communication.SendableRegistry;
 import net.minebit.networking.communication.requests.factories.GetRequestFactory;
 import net.minebit.networking.communication.requests.factories.SetRequestFactory;
+import net.minebit.networking.exceptions.communication.requests.RequestException;
 
 /**
  * This class represents a request that can be sent over the network from a
@@ -15,14 +18,13 @@ import net.minebit.networking.communication.requests.factories.SetRequestFactory
  */
 public abstract class AbstractRequest extends AbstractSendable {
 
-	private long conversationId;
-
 	/**
 	 * This constructor constructs a new {@link AbstractRequest}
 	 * 
 	 * @param conversationId The conversation id of the request
 	 */
 	public AbstractRequest() {
+		
 	}
 
 	private static final SendableRegistry<AbstractRequest> REQUEST_REGISTRY = new SendableRegistry<>();
@@ -48,23 +50,17 @@ public abstract class AbstractRequest extends AbstractSendable {
 		AbstractRequest.REQUEST_REGISTRY.registerUnchecked((short) 0, GetRequest.class, GetRequestFactory.getInstance());
 		AbstractRequest.REQUEST_REGISTRY.registerUnchecked((short) 1, SetRequest.class, SetRequestFactory.getInstance());
 	}
-
-	/**
-	 * This method returns the request's conversation id.
-	 * 
-	 * @return The requests conversation id
-	 */
-	public long getConversationId() {
-		return conversationId;
-	}
-
-	/**
-	 * This method sets the request's conversation id.
-	 * 
-	 * @param conversationId The requests conversation id
-	 */
-	public void setConversationId(long conversationId) {
-		this.conversationId = conversationId;
-	}
+	
+	@Override
+	public abstract void load(Map<String, Object> input) throws RequestException;
+	
+	@Override
+	public abstract void load(byte[] input) throws RequestException;
+	
+	@Override
+	public abstract Map<String, Object> asMap() throws RequestException;
+	
+	@Override
+	public abstract byte[] asBytes() throws RequestException;
 
 }
