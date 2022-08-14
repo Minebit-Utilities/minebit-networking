@@ -1,7 +1,9 @@
 package net.minebit.networking.converting;
 
 import net.minebit.networking.exceptions.conversions.PrimitiveConversionException;
+import net.minebit.networking.exceptions.general.ByteException;
 import net.minebit.networking.exceptions.general.InputException;
+import net.minebit.networking.miscellaneous.ByteUtils;
 
 /**
  * {@link PrimitiveConverter} handles the conversion of primitives to byte
@@ -209,7 +211,7 @@ public final class PrimitiveConverter {
 		byte[] bytes;
 		try {
 			bytes = ByteUtils.resize(input, 1);
-		} catch (InputException exception) {
+		} catch (ByteException exception) {
 			throw new PrimitiveConversionException("An error occured while resizing the given byte array!", exception);
 		}
 		byte data = bytes[0];
@@ -233,7 +235,7 @@ public final class PrimitiveConverter {
 		byte[] bytes;
 		try {
 			bytes = ByteUtils.resize(input, 1);
-		} catch (InputException exception) {
+		} catch (ByteException exception) {
 			throw new PrimitiveConversionException("An error occured while resizing the given byte array!", exception);
 		}
 		return (byte) (bytes[0] & 0xFF);
@@ -251,7 +253,7 @@ public final class PrimitiveConverter {
 		byte[] bytes;
 		try {
 			bytes = ByteUtils.resize(input, 2);
-		} catch (InputException exception) {
+		} catch (ByteException exception) {
 			throw new PrimitiveConversionException("An error occured while resizing the given byte array!", exception);
 		}
 		return (short) ((bytes[0] & 0xFF) << 8 | (bytes[1] & 0xFF));
@@ -269,7 +271,7 @@ public final class PrimitiveConverter {
 		byte[] bytes;
 		try {
 			bytes = ByteUtils.resize(input, 4);
-		} catch (InputException exception) {
+		} catch (ByteException exception) {
 			throw new PrimitiveConversionException("An error occured while resizing the given byte array!", exception);
 		}
 		return (bytes[0] & 0xFF) << 24 | (bytes[1] & 0xFF) << 16 | (bytes[2] & 0xFF) << 8 | (bytes[3] & 0xFF);
@@ -287,7 +289,7 @@ public final class PrimitiveConverter {
 		byte[] bytes;
 		try {
 			bytes = ByteUtils.resize(input, 8);
-		} catch (InputException exception) {
+		} catch (ByteException exception) {
 			throw new PrimitiveConversionException("An error occured while resizing the given byte array!", exception);
 		}
 		return ((long) (bytes[0] & 0xFF) << 56) | ((long) (bytes[1] & 0xFF) << 48) | ((long) (bytes[2] & 0xFF) << 40) | ((long) (bytes[3] & 0xFF) << 32) | ((long) (bytes[4] & 0xFF) << 24) | ((long) (bytes[5] & 0xFF) << 16) | ((long) (bytes[6] & 0xFF) << 8) | ((long) bytes[7] & 0xFF);
@@ -331,7 +333,7 @@ public final class PrimitiveConverter {
 		byte[] bytes;
 		try {
 			bytes = ByteUtils.resize(input, 2);
-		} catch (InputException exception) {
+		} catch (ByteException exception) {
 			throw new PrimitiveConversionException("An error occured while resizing the given byte array!", exception);
 		}
 		return (char) ((bytes[0] & 0xFF) << 8 | (bytes[1] & 0xFF));
