@@ -104,7 +104,7 @@ public class GetRequest extends AbstractRequest {
 	 * @return The name of the wanted value
 	 */
 	public String getValue() {
-		return value;
+		return this.value;
 	}
 
 }

@@ -134,7 +134,7 @@ public class ErrorResponse extends AbstractResponse {
 	 * @return The error's code
 	 */
 	public short getCode() {
-		return code;
+		return this.code;
 	}
 
 	/**
@@ -143,7 +143,7 @@ public class ErrorResponse extends AbstractResponse {
 	 * @return The error's message
 	 */
 	public String getMessage() {
-		return message;
+		return this.message;
 	}
 	
 }

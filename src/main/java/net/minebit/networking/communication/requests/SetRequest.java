@@ -168,7 +168,7 @@ public class SetRequest extends AbstractRequest {
 	 * @return The name of the wanted value
 	 */
 	public String getValue() {
-		return value;
+		return this.value;
 	}
 
 	/**
@@ -177,7 +177,7 @@ public class SetRequest extends AbstractRequest {
 	 * @return The wanted value
 	 */
 	public Object getData() {
-		return data;
+		return this.data;
 	}
 
 }
