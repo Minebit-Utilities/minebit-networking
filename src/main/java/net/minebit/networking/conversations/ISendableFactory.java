@@ -1,8 +1,8 @@
-package net.minebit.networking.communication;
+package net.minebit.networking.conversations;
 
 import java.util.Map;
 
-import net.minebit.networking.exceptions.communication.SendableException;
+import net.minebit.networking.exceptions.conversations.SendableException;
 
 /**
  * This interface defines how an {@link AbstractSendable} can be constructed.

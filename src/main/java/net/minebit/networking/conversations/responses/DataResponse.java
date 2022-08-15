@@ -1,12 +1,12 @@
-package net.minebit.networking.communication.responses;
+package net.minebit.networking.conversations.responses;
 
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
 import net.minebit.networking.converting.ConversionHandler;
-import net.minebit.networking.exceptions.communication.ResponseException;
-import net.minebit.networking.exceptions.communication.SendableException;
+import net.minebit.networking.exceptions.conversations.ResponseException;
+import net.minebit.networking.exceptions.conversations.SendableException;
 import net.minebit.networking.exceptions.conversions.ConversionException;
 
 /**

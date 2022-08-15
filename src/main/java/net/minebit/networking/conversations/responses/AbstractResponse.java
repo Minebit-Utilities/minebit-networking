@@ -1,13 +1,13 @@
-package net.minebit.networking.communication.responses;
+package net.minebit.networking.conversations.responses;
 
 import java.util.Map;
 
-import net.minebit.networking.communication.AbstractSendable;
-import net.minebit.networking.communication.SendableRegistry;
-import net.minebit.networking.communication.responses.factories.DataResponseFactory;
-import net.minebit.networking.communication.responses.factories.ErrorResponseFactory;
-import net.minebit.networking.communication.responses.factories.SuccessResponseFactory;
-import net.minebit.networking.exceptions.communication.ResponseException;
+import net.minebit.networking.conversations.AbstractSendable;
+import net.minebit.networking.conversations.SendableRegistry;
+import net.minebit.networking.conversations.responses.factories.DataResponseFactory;
+import net.minebit.networking.conversations.responses.factories.ErrorResponseFactory;
+import net.minebit.networking.conversations.responses.factories.SuccessResponseFactory;
+import net.minebit.networking.exceptions.conversations.ResponseException;
 
 /**
  * This class represents a response that can be sent over the network from a

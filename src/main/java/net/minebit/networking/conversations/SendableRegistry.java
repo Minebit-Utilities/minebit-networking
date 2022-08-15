@@ -1,10 +1,10 @@
-package net.minebit.networking.communication;
+package net.minebit.networking.conversations;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minebit.networking.exceptions.communication.SendableRegistryException;
+import net.minebit.networking.exceptions.conversations.SendableRegistryException;
 import net.minebit.networking.miscellaneous.Pair;
 
 /**

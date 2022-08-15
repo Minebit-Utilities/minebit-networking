@@ -1,10 +1,10 @@
-package net.minebit.networking.communication.responses;
+package net.minebit.networking.conversations.responses;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minebit.networking.exceptions.communication.ResponseException;
-import net.minebit.networking.exceptions.communication.SendableException;
+import net.minebit.networking.exceptions.conversations.ResponseException;
+import net.minebit.networking.exceptions.conversations.SendableException;
 
 /**
  * This class represents a success response that can be sent over the network

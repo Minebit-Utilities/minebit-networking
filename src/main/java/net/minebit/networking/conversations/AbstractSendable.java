@@ -1,8 +1,8 @@
-package net.minebit.networking.communication;
+package net.minebit.networking.conversations;
 
 import java.util.Map;
 
-import net.minebit.networking.exceptions.communication.SendableException;
+import net.minebit.networking.exceptions.conversations.SendableException;
 
 /**
  * This class represents an object that can be sent over the network from a

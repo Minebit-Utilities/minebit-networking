@@ -1,12 +1,12 @@
-package net.minebit.networking.communication.requests;
+package net.minebit.networking.conversations.requests;
 
 import java.util.Map;
 
-import net.minebit.networking.communication.AbstractSendable;
-import net.minebit.networking.communication.SendableRegistry;
-import net.minebit.networking.communication.requests.factories.GetRequestFactory;
-import net.minebit.networking.communication.requests.factories.SetRequestFactory;
-import net.minebit.networking.exceptions.communication.RequestException;
+import net.minebit.networking.conversations.AbstractSendable;
+import net.minebit.networking.conversations.SendableRegistry;
+import net.minebit.networking.conversations.requests.factories.GetRequestFactory;
+import net.minebit.networking.conversations.requests.factories.SetRequestFactory;
+import net.minebit.networking.exceptions.conversations.RequestException;
 
 /**
  * This class represents a request that can be sent over the network from a

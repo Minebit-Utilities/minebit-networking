@@ -1,6 +1,6 @@
-package net.minebit.networking.exceptions.communication;
+package net.minebit.networking.exceptions.conversations;
 
-import net.minebit.networking.communication.AbstractSendable;
+import net.minebit.networking.conversations.AbstractSendable;
 import net.minebit.networking.exceptions.LibraryException;
 
 /**

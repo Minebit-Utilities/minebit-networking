@@ -1,10 +1,10 @@
-package net.minebit.networking.communication.requests;
+package net.minebit.networking.conversations.requests;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import net.minebit.networking.converting.ConversionHandler;
-import net.minebit.networking.exceptions.communication.RequestException;
+import net.minebit.networking.exceptions.conversations.RequestException;
 import net.minebit.networking.exceptions.conversions.ConversionException;
 
 /**

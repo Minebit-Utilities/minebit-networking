@@ -1,10 +1,10 @@
-package net.minebit.networking.communication.responses.factories;
+package net.minebit.networking.conversations.responses.factories;
 
 import java.util.Map;
 
-import net.minebit.networking.communication.ISendableFactory;
-import net.minebit.networking.communication.responses.SuccessResponse;
-import net.minebit.networking.exceptions.communication.SendableException;
+import net.minebit.networking.conversations.ISendableFactory;
+import net.minebit.networking.conversations.responses.SuccessResponse;
+import net.minebit.networking.exceptions.conversations.SendableException;
 
 /**
  * This class represents a factory used to construct instances of
