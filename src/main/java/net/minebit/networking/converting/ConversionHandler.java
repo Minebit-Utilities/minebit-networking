@@ -71,7 +71,11 @@ public final class ConversionHandler {
 		if (representsPrimitive) {
 			return PrimitiveConverter.convertToPrimitive(input, objectClass);
 		}
-		return ObjectConverter.convertToObject(input);
+		Object result = ObjectConverter.convertToObject(input);
+		if (objectClass.isInstance(result)) {
+			throw new ConversionException("The output object is not an instance of the given class!");
+		}
+		return result;
 	}
 
 }
