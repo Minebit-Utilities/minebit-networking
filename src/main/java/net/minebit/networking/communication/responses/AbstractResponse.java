@@ -7,7 +7,7 @@ import net.minebit.networking.communication.SendableRegistry;
 import net.minebit.networking.communication.responses.factories.DataResponseFactory;
 import net.minebit.networking.communication.responses.factories.ErrorResponseFactory;
 import net.minebit.networking.communication.responses.factories.SuccessResponseFactory;
-import net.minebit.networking.exceptions.communication.responses.ResponseException;
+import net.minebit.networking.exceptions.communication.ResponseException;
 
 /**
  * This class represents a response that can be sent over the network from a

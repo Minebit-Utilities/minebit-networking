@@ -6,7 +6,7 @@ import net.minebit.networking.communication.AbstractSendable;
 import net.minebit.networking.communication.SendableRegistry;
 import net.minebit.networking.communication.requests.factories.GetRequestFactory;
 import net.minebit.networking.communication.requests.factories.SetRequestFactory;
-import net.minebit.networking.exceptions.communication.requests.RequestException;
+import net.minebit.networking.exceptions.communication.RequestException;
 
 /**
  * This class represents a request that can be sent over the network from a

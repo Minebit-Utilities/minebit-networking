@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minebit.networking.converting.ConversionHandler;
-import net.minebit.networking.exceptions.communication.requests.RequestException;
+import net.minebit.networking.exceptions.communication.RequestException;
 import net.minebit.networking.exceptions.conversions.ConversionException;
 
 /**

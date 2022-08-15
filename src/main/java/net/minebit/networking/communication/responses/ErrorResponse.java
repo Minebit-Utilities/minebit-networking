@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minebit.networking.converting.ConversionHandler;
+import net.minebit.networking.exceptions.communication.ResponseException;
 import net.minebit.networking.exceptions.communication.SendableException;
-import net.minebit.networking.exceptions.communication.responses.ResponseException;
 import net.minebit.networking.exceptions.conversions.ConversionException;
 
 /**

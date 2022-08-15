@@ -1,6 +1,4 @@
-package net.minebit.networking.exceptions.communication.responses;
-
-import net.minebit.networking.exceptions.communication.SendableException;
+package net.minebit.networking.exceptions.communication;
 
 /**
  * {@link ResponseException} is a {@link SendableException} that is thrown
