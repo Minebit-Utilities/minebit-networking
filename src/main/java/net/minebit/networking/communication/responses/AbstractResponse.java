@@ -5,6 +5,7 @@ import java.util.Map;
 import net.minebit.networking.communication.AbstractSendable;
 import net.minebit.networking.communication.SendableRegistry;
 import net.minebit.networking.communication.responses.factories.ErrorResponseFactory;
+import net.minebit.networking.communication.responses.factories.SuccessResponseFactory;
 import net.minebit.networking.exceptions.communication.responses.ResponseException;
 
 /**
@@ -45,6 +46,7 @@ public abstract class AbstractResponse extends AbstractSendable {
 	@SuppressWarnings("deprecation")
 	private static void registerBuildIn() {
 		AbstractResponse.RESPONSE_REGISTRY.registerUnchecked((short) 0, ErrorResponse.class, ErrorResponseFactory.getInstance());
+		AbstractResponse.RESPONSE_REGISTRY.registerUnchecked((short) 1, SuccessResponse.class, SuccessResponseFactory.getInstance());
 	}
 
 	@Override
