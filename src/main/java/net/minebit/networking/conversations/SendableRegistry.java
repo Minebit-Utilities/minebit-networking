@@ -121,10 +121,11 @@ public class SendableRegistry<SendableType extends AbstractSendable> {
 	 * @param sendableClass   The sendable class to register
 	 * @param sendableFactory The construction factory used to construct the
 	 *                        sendable
+	 * @param <InputType>     The class type of the type class and the factory
 	 * @throws SendableRegistryException If an error occurs while registering the
 	 *                                   given objects.
 	 */
-	public void register(short index, Class<? extends SendableType> sendableClass, ISendableFactory<? extends SendableType> sendableFactory) throws SendableRegistryException {
+	public <InputType extends SendableType> void register(short index, Class<InputType> sendableClass, ISendableFactory<InputType> sendableFactory) throws SendableRegistryException {
 		synchronized (this.mutex) {
 			if (sendableClass == null) {
 				throw new SendableRegistryException("The given sendable class cannot be NULL!");
@@ -152,9 +153,10 @@ public class SendableRegistry<SendableType extends AbstractSendable> {
 	 * @param sendableClass   The sendable class to register
 	 * @param sendableFactory The construction factory used to construct the
 	 *                        sendable
+	 * @param <InputType>     The class type of the type class and the factory
 	 */
 	@Deprecated
-	public void registerUnchecked(short index, Class<? extends SendableType> sendableClass, ISendableFactory<? extends SendableType> sendableFactory) {
+	public <InputType extends SendableType> void registerUnchecked(short index, Class<InputType> sendableClass, ISendableFactory<InputType> sendableFactory) {
 		Pair<ISendableFactory<? extends SendableType>, Short> registryPair = new Pair<ISendableFactory<? extends SendableType>, Short>(sendableFactory, index);
 		this.registryMap.put(sendableClass, registryPair);
 	}
