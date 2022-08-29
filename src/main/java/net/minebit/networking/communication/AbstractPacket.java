@@ -20,19 +20,19 @@ import net.minebit.networking.miscellaneous.ByteUtils;
  * @author Aggelowe
  * @since 0.1
  */
-public abstract class Packet<SendableType extends AbstractSendable> {
+public abstract class AbstractPacket<SendableType extends AbstractSendable> {
 
 	private SendableType sendable;
 	private boolean compress;
 
 	/**
-	 * This constructor constructs a new {@link Packet}
+	 * This constructor constructs a new {@link AbstractPacket}
 	 * 
 	 * @param sendable The sendable to send
 	 * @param compress Whether to allow compression of the sendable
 	 * @throws CommunicationException If the given sendable is null
 	 */
-	public Packet(SendableType sendable, boolean compress) throws CommunicationException {
+	public AbstractPacket(SendableType sendable, boolean compress) throws CommunicationException {
 		if (sendable == null) {
 			throw new CommunicationException("The given sendable cannot be NULL!");
 		}
@@ -40,13 +40,13 @@ public abstract class Packet<SendableType extends AbstractSendable> {
 		this.compress = compress;
 	}
 	/**
-	 * This constructor constructs a new {@link Packet}
+	 * This constructor constructs a new {@link AbstractPacket}
 	 * 
 	 * @param sendable The sendable to send
 	 * @param compress Whether to allow compression of the sendable
 	 * @throws CommunicationException If an error occurs while loading the given bytes
 	 */
-	public Packet(byte[] data, boolean compress) throws CommunicationException {
+	public AbstractPacket(byte[] data, boolean compress) throws CommunicationException {
 		if (data == null) {
 			throw new CommunicationException("The given byte array cannot be NULL!");
 		}

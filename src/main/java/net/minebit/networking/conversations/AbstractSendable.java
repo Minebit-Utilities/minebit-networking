@@ -60,7 +60,7 @@ public abstract class AbstractSendable {
 	 * 
 	 * @return The sendable's conversation id
 	 */
-	public long getConversationId() {
+	public final long getConversationId() {
 		return this.conversationId;
 	}
 
@@ -69,7 +69,7 @@ public abstract class AbstractSendable {
 	 * 
 	 * @param conversationId The sendable's conversation id
 	 */
-	public void setConversationId(long conversationId) {
+	public final void setConversationId(long conversationId) {
 		this.conversationId = conversationId;
 	}
 	

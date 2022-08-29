@@ -14,7 +14,7 @@ import net.minebit.networking.exceptions.conversations.SendableRegistryException
  * @author Aggelowe
  * @since 0.1
  */
-public class RequestPacket extends Packet<AbstractRequest> {
+public class RequestPacket extends AbstractPacket<AbstractRequest> {
 
 	/**
 	 * This constructor constructs a new {@link RequestPacket}.
