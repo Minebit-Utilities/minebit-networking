@@ -49,6 +49,7 @@ public class Client {
 	private final ThreadPoolExecutor executor;
 	private final boolean compress;
 	private final IExceptionHandler exceptionHandler;
+	private final int delay;
 
 	private final Map<Long, AbstractRequest> conversations = new HashMap<>();
 	private final Deque<byte[]> requests = new ArrayDeque<>();
@@ -57,12 +58,13 @@ public class Client {
 	private final Runnable clientLoop = () -> {
 		while (true) {
 			synchronized (this.mutex) {
-				if (!running) {
+				if (!this.running) {
 					break;
 				}
 				this.write();
 				this.read();
 			}
+			this.cycle();
 		}
 	};
 
@@ -70,22 +72,33 @@ public class Client {
 	 * This constructor constructs a new {@link Client} with the given address and
 	 * byte buffer size.
 	 * 
-	 * @param address    The address of the server to connect to
-	 * @param bufferSize The size of the buffers used for communication.S
+	 * @param address          The address of the server to connect to
+	 * @param bufferSize       The size of the buffers used for communication
+	 * @param executor         The executor to run the client loop on
+	 * @param compress         Whether to compress the requests
+	 * @param exceptionHandler The handler of the exceptions
+	 * @param delay            The delay between each read and write
 	 * @throws ClientException If an error occurs while constructing the client
 	 */
-	public Client(InetSocketAddress address, int bufferSize, ThreadPoolExecutor executor, boolean compress, IExceptionHandler exceptionHandler) throws ClientException {
+	public Client(InetSocketAddress address, int bufferSize, ThreadPoolExecutor executor, boolean compress, IExceptionHandler exceptionHandler, int delay) throws ClientException {
 		if (address == null) {
 			throw new ClientException("The given address cannot be NULL!");
 		}
 		if (executor == null) {
 			throw new ClientException("The given executor cannot be NULL!");
 		}
+		if (bufferSize < 1) {
+			throw new ClientException("The given buffer size cannot be smaller than 1!");
+		}
+		if (delay < 0) {
+			throw new ClientException("The given delay cannot be smaller than 0!");
+		}
 		this.address = address;
 		this.bufferSize = bufferSize;
 		this.executor = executor;
 		this.compress = compress;
 		this.exceptionHandler = exceptionHandler;
+		this.delay = delay;
 	}
 
 	/**
@@ -236,7 +249,7 @@ public class Client {
 			return requests.size() != 0 || sendBuffer != null;
 		}
 	}
-	
+
 	/**
 	 * This method reads the data sent from the server
 	 */
@@ -296,6 +309,19 @@ public class Client {
 			this.readBuffer = null;
 		}
 	}
+
+	/**
+	 * This method cycles between each read and write
+	 */
+	private void cycle() {
+		try {
+			Thread.sleep(this.delay);
+		} catch (InterruptedException exception) {
+			if (this.exceptionHandler != null) {
+				this.exceptionHandler.handle(exception);
+			}
+		}
+	}
 	
 	/**
 	 * This method returns whether the client is currently reading from the channel.
@@ -307,7 +333,7 @@ public class Client {
 			return this.readStage == EClientRead.IDLE;
 		}
 	}
-	
+
 	/**
 	 * This enum represents the current reading stage of the client.
 	 * 
@@ -316,24 +342,25 @@ public class Client {
 	 *
 	 */
 	private enum EClientRead {
-		
+
 		IDLE((client) -> 1), SIZE((client) -> 4), PACKET((client) -> client.packetSize);
-		
+
 		private final Function<Client, Integer> function;
-		
+
 		private EClientRead(Function<Client, Integer> function) {
 			this.function = function;
 		}
 
 		/**
-		 * This method returns the function used to obtain the size of the data equivalent to each stage
+		 * This method returns the function used to obtain the size of the data
+		 * equivalent to each stage
 		 * 
 		 * @return The size function
 		 */
 		public Function<Client, Integer> getFunction() {
 			return function;
 		}
-		
+
 	}
-	
+
 }
