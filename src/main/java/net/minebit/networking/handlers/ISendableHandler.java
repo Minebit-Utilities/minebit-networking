@@ -1,6 +1,7 @@
 package net.minebit.networking.handlers;
 
 import net.minebit.networking.conversations.AbstractSendable;
+import net.minebit.networking.miscellaneous.Pair;
 
 /**
  * This interface represents a handler used to handle received sendables.
@@ -9,6 +10,6 @@ import net.minebit.networking.conversations.AbstractSendable;
  * @since 0.1
  *
  */
-public interface ISendableHandler<InputType extends AbstractSendable> extends IHandler<InputType> {
+public interface ISendableHandler<InputType extends AbstractSendable> extends IHandler<Pair<Long, InputType>> {
 
 }
