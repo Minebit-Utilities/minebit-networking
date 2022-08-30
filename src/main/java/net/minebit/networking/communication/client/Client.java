@@ -10,7 +10,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.Executor;
 import java.util.function.Function;
 
 import net.minebit.networking.communication.RequestPacket;
@@ -23,7 +23,6 @@ import net.minebit.networking.exceptions.communication.client.ClientException;
 import net.minebit.networking.exceptions.conversions.ConversionException;
 import net.minebit.networking.handlers.IExceptionHandler;
 import net.minebit.networking.handlers.IResponseHandler;
-import net.minebit.networking.miscellaneous.Pair;
 
 /**
  * This class represents the client in a client-server communication.
@@ -38,18 +37,18 @@ public class Client {
 
 	private boolean running = false;
 	private SocketChannel channel;
-	private ByteBuffer buffer;
 	private ByteBuffer sendBuffer;
 	private ByteBuffer readBuffer;
 	private EClientRead readStage = EClientRead.IDLE;
 	private int packetSize;
 
 	private final InetSocketAddress address;
-	private final int bufferSize;
-	private final ThreadPoolExecutor executor;
+	private final ByteBuffer buffer;
+	private final Executor executor;
 	private final boolean compress;
 	private final IExceptionHandler exceptionHandler;
-	private final int delay;
+	private final int nanos;
+	private final long millis;
 
 	private final Map<Long, AbstractRequest> conversations = new HashMap<>();
 	private final Deque<byte[]> requests = new ArrayDeque<>();
@@ -80,7 +79,7 @@ public class Client {
 	 * @param delay            The delay between each read and write
 	 * @throws ClientException If an error occurs while constructing the client
 	 */
-	public Client(InetSocketAddress address, int bufferSize, ThreadPoolExecutor executor, boolean compress, IExceptionHandler exceptionHandler, int delay) throws ClientException {
+	public Client(InetSocketAddress address, int bufferSize, Executor executor, boolean compress, IExceptionHandler exceptionHandler, long delay) throws ClientException {
 		if (address == null) {
 			throw new ClientException("The given address cannot be NULL!");
 		}
@@ -94,11 +93,12 @@ public class Client {
 			throw new ClientException("The given delay cannot be smaller than 0!");
 		}
 		this.address = address;
-		this.bufferSize = bufferSize;
+		this.buffer = ByteBuffer.allocate(bufferSize);
 		this.executor = executor;
 		this.compress = compress;
 		this.exceptionHandler = exceptionHandler;
-		this.delay = delay;
+		this.nanos = (int) (delay % 1000000);
+		this.millis = (delay - this.nanos) / 1000000;
 	}
 
 	/**
@@ -111,7 +111,6 @@ public class Client {
 			if (this.running) {
 				throw new ClientException("The client is already running!");
 			}
-			this.clear();
 			try {
 				this.channel = SocketChannel.open();
 				this.channel.configureBlocking(false);
@@ -121,18 +120,9 @@ public class Client {
 			} catch (IOException exception) {
 				throw new ClientException("An error occured while connecting the client to the server!", exception);
 			}
-			this.buffer = ByteBuffer.allocate(this.bufferSize);
 			this.executor.execute(clientLoop);
 			this.running = true;
 		}
-	}
-
-	/**
-	 * This method clears the client's previous data.
-	 */
-	private void clear() {
-		this.channel = null;
-		this.buffer = null;
 	}
 
 	/**
@@ -151,6 +141,7 @@ public class Client {
 				throw new ClientException("An error occured while closing the channel!", exception);
 			}
 			this.running = false;
+			this.channel = null;
 		}
 	}
 
@@ -206,11 +197,11 @@ public class Client {
 				}
 			}
 		}
-		byte[] bytes = new byte[Math.min(this.sendBuffer.remaining(), this.bufferSize)];
+		byte[] bytes = new byte[Math.min(this.sendBuffer.remaining(), this.buffer.capacity())];
 		this.sendBuffer.get(bytes);
-		this.buffer.position(this.bufferSize - bytes.length);
+		this.buffer.position(this.buffer.capacity() - bytes.length);
 		this.buffer.put(bytes);
-		this.buffer.position(this.bufferSize - bytes.length);
+		this.buffer.position(this.buffer.capacity() - bytes.length);
 		try {
 			this.channel.write(this.buffer);
 		} catch (IOException exception) {
@@ -257,7 +248,7 @@ public class Client {
 		if (this.readBuffer == null) {
 			this.readBuffer = ByteBuffer.allocate(this.readStage.getFunction().apply(this));
 		}
-		this.buffer.position(this.bufferSize - Math.min(this.readBuffer.remaining(), this.bufferSize));
+		this.buffer.position(this.buffer.capacity() - Math.min(this.readBuffer.remaining(), this.buffer.capacity()));
 		try {
 			this.channel.read(buffer);
 		} catch (IOException exception) {
@@ -266,7 +257,7 @@ public class Client {
 			}
 			return;
 		}
-		this.buffer.position(this.bufferSize - Math.min(this.readBuffer.remaining(), this.bufferSize));
+		this.buffer.position(this.buffer.capacity() - Math.min(this.readBuffer.remaining(), this.buffer.capacity()));
 		this.readBuffer.put(buffer);
 		if (this.readBuffer.position() == this.readBuffer.limit()) {
 			byte[] bytes = this.readBuffer.array();
@@ -299,9 +290,8 @@ public class Client {
 					return;
 				}
 				AbstractResponse response = packet.getSendable();
-				Pair<Long, AbstractResponse> handlerPair = new Pair<>(response.getConversationId(), response);
 				for (IResponseHandler handler : this.responseHandlerList) {
-					handler.handle(handlerPair);
+					handler.handle(response);
 				}
 				this.readStage = EClientRead.IDLE;
 				break;
@@ -310,18 +300,6 @@ public class Client {
 		}
 	}
 
-	/**
-	 * This method cycles between each read and write
-	 */
-	private void cycle() {
-		try {
-			Thread.sleep(this.delay);
-		} catch (InterruptedException exception) {
-			if (this.exceptionHandler != null) {
-				this.exceptionHandler.handle(exception);
-			}
-		}
-	}
 	
 	/**
 	 * This method returns whether the client is currently reading from the channel.
@@ -331,6 +309,19 @@ public class Client {
 	public boolean isReading() {
 		synchronized (this.mutex) {
 			return this.readStage == EClientRead.IDLE;
+		}
+	}
+	
+	/**
+	 * This method cycles between each read and write
+	 */
+	private void cycle() {
+		try {
+			Thread.sleep(this.millis, this.nanos);
+		} catch (InterruptedException exception) {
+			if (this.exceptionHandler != null) {
+				this.exceptionHandler.handle(exception);
+			}
 		}
 	}
 
