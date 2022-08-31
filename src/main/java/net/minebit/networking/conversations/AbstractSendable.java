@@ -13,8 +13,6 @@ import net.minebit.networking.exceptions.conversations.SendableException;
  *
  */
 public abstract class AbstractSendable {
-
-	private long conversationId;
 	
 	/**
 	 * This constructor constructs a new {@link AbstractSendable}.
@@ -54,23 +52,5 @@ public abstract class AbstractSendable {
 	 * @throws SendableException If an error occurs while getting the data.
 	 */
 	public abstract byte[] asBytes() throws SendableException;
-	
-	/**
-	 * This method returns the sendable's conversation id.
-	 * 
-	 * @return The sendable's conversation id
-	 */
-	public final long getConversationId() {
-		return this.conversationId;
-	}
-
-	/**
-	 * This method sets the sendable's conversation id.
-	 * 
-	 * @param conversationId The sendable's conversation id
-	 */
-	public final void setConversationId(long conversationId) {
-		this.conversationId = conversationId;
-	}
 	
 }
