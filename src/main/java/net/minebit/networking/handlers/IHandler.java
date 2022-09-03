@@ -7,7 +7,7 @@ package net.minebit.networking.handlers;
  * @since 0.1
  *
  * @param <InputType> The type of the input given to the {@link #handle(Object)}
- *                    method.
+ *                    method
  */
 public interface IHandler<InputType> {
 
