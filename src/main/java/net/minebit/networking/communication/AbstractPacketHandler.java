@@ -46,11 +46,10 @@ public abstract class AbstractPacketHandler<SendableType extends AbstractSendabl
 	 * and allowed.
 	 * 
 	 * @param pair     The pair representing the packet
-	 * @param compress Whether to allow compressing the packet or not.F
 	 * @return The packet as bytes
 	 * @throws PacketException If an error occurs while getting the packet as bytes
 	 */
-	public byte[] asBytes(Pair<SendableType, Long> pair, boolean compress) throws PacketException {
+	public byte[] asBytes(Pair<SendableType, Long> pair) throws PacketException {
 		if (pair == null) {
 			throw new PacketException("The given pair cannot be NULL!");
 		}
