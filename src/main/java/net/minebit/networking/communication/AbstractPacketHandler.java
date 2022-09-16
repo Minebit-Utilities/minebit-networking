@@ -12,7 +12,7 @@ import net.minebit.networking.exceptions.conversations.SendableRegistryException
 import net.minebit.networking.exceptions.conversions.ConversionException;
 import net.minebit.networking.exceptions.wrappers.WrapperException;
 import net.minebit.networking.miscellaneous.Pair;
-import net.minebit.networking.wrappers.CompressionWrapper;
+import net.minebit.networking.wrappers.IWrapper;
 
 /**
  * This class represents a handler that handles the translation of a sendable to
@@ -25,6 +25,18 @@ import net.minebit.networking.wrappers.CompressionWrapper;
  *
  */
 public abstract class AbstractPacketHandler<SendableType extends AbstractSendable> {
+
+	private final IWrapper[] wrappers;
+
+	/**
+	 * This method constructs a new packet handler that handles the translation of a
+	 * sendable.
+	 * 
+	 * @param wrappers The wrappers to wrap the byte arrays with.
+	 */
+	public AbstractPacketHandler(IWrapper... wrappers) {
+		this.wrappers = wrappers;
+	}
 
 	/**
 	 * This method returns the registry that contains the type classes, indexes and
@@ -45,7 +57,7 @@ public abstract class AbstractPacketHandler<SendableType extends AbstractSendabl
 	 * This method returns the packet as a byte array and compresses it if necessary
 	 * and allowed.
 	 * 
-	 * @param pair     The pair representing the packet
+	 * @param pair The pair representing the packet
 	 * @return The packet as bytes
 	 * @throws PacketException If an error occurs while getting the packet as bytes
 	 */
@@ -81,10 +93,17 @@ public abstract class AbstractPacketHandler<SendableType extends AbstractSendabl
 		buffer.put(sendableBytes);
 		byte[] result = buffer.array();
 		try {
-			return CompressionWrapper.getInstance().wrap(result);
+			if (wrappers != null) {
+				for (IWrapper wrapper : this.wrappers) {
+					if (wrapper != null) {
+						result = wrapper.wrap(result);
+					}
+				}
+			}
 		} catch (WrapperException exception) {
 			throw new PacketException("An error occured while trying to compress the packet!", exception);
 		}
+		return result;
 	}
 
 	/**
@@ -99,9 +118,15 @@ public abstract class AbstractPacketHandler<SendableType extends AbstractSendabl
 		if (bytes == null) {
 			throw new PacketException("The given byte array cannot be NULL!");
 		}
-		byte[] unwrapped;
+		byte[] unwrapped = bytes;
 		try {
-			unwrapped = CompressionWrapper.getInstance().unwrap(bytes);
+			if (wrappers != null) {
+				int index = this.wrappers.length;
+				while (index > 0) {
+					unwrapped = this.wrappers[index - 1].unwrap(unwrapped);
+					index--;
+				}
+			}
 		} catch (WrapperException exception) {
 			throw new PacketException("An error occured while trying to decompress the packet!", exception);
 		}

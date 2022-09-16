@@ -1,6 +1,6 @@
 package net.minebit.networking.communication.client;
 
-import static net.minebit.networking.communication.client.EClientStatus.DISABLED;
+import static net.minebit.networking.communication.client.EClientStatus.*;
 
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;

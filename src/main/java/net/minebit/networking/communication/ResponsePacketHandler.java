@@ -2,6 +2,7 @@ package net.minebit.networking.communication;
 
 import net.minebit.networking.conversations.SendableRegistry;
 import net.minebit.networking.conversations.responses.AbstractResponse;
+import net.minebit.networking.wrappers.IWrapper;
 
 /**
  * This class represents a handler that handles the translation of a response to
@@ -13,9 +14,14 @@ import net.minebit.networking.conversations.responses.AbstractResponse;
  */
 public class ResponsePacketHandler extends AbstractPacketHandler<AbstractResponse> {
 
-	private static final ResponsePacketHandler INSTANCE = new ResponsePacketHandler();
-
-	private ResponsePacketHandler() {
+	/**
+	 * This method constructs a new packet handler that handles the translation of a
+	 * response.
+	 * 
+	 * @param wrappers The wrappers to wrap the byte arrays with.
+	 */
+	public ResponsePacketHandler(IWrapper... wrappers) {
+		super(wrappers);
 	}
 
 	@Override
@@ -26,15 +32,6 @@ public class ResponsePacketHandler extends AbstractPacketHandler<AbstractRespons
 	@Override
 	protected Class<? extends AbstractResponse> typeClass(AbstractResponse sendable) {
 		return sendable.getClass();
-	}
-
-	/**
-	 * This method returns the only instance of {@link ResponsePacketHandler}
-	 * 
-	 * @return The handler's instance
-	 */
-	public static ResponsePacketHandler getInstance() {
-		return ResponsePacketHandler.INSTANCE;
 	}
 
 }
