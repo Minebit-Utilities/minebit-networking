@@ -5,6 +5,7 @@ import static net.minebit.networking.communication.client.EClientStatus.*;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 
+import net.minebit.networking.conversations.requests.AbstractRequest;
 import net.minebit.networking.exceptions.communication.client.ClientException;
 
 /**
@@ -36,7 +37,7 @@ public abstract class AbstractClient {
 	 * @param address The address of the server
 	 * @throws ClientException If an error occurs while starting the client
 	 */
-	public abstract void start(InetSocketAddress address);
+	public abstract void start(InetSocketAddress address) throws ClientException;
 
 	/**
 	 * This method stops the client.
@@ -48,9 +49,10 @@ public abstract class AbstractClient {
 	/**
 	 * This method sends the given request to the connected server.
 	 * 
+	 * @param request The request to send to the connected server.
 	 * @throws ClientException If an error occurs while sending the request.
 	 */
-	public abstract void sendRequest() throws ClientException;
+	public abstract void sendRequest(AbstractRequest request) throws ClientException;
 
 	/**
 	 * This method returns the current status of the client.

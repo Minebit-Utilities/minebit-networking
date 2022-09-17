@@ -101,7 +101,7 @@ public abstract class AbstractPacketHandler<SendableType extends AbstractSendabl
 				}
 			}
 		} catch (WrapperException exception) {
-			throw new PacketException("An error occured while trying to compress the packet!", exception);
+			throw new PacketException("An error occured while trying to wrap the packet!", exception);
 		}
 		return result;
 	}
@@ -123,12 +123,12 @@ public abstract class AbstractPacketHandler<SendableType extends AbstractSendabl
 			if (wrappers != null) {
 				int index = this.wrappers.length;
 				while (index > 0) {
-					unwrapped = this.wrappers[index - 1].unwrap(unwrapped);
 					index--;
+					unwrapped = this.wrappers[index].unwrap(unwrapped);
 				}
 			}
 		} catch (WrapperException exception) {
-			throw new PacketException("An error occured while trying to decompress the packet!", exception);
+			throw new PacketException("An error occured while trying to unwrap the packet!", exception);
 		}
 		if (unwrapped.length < 10) {
 			throw new PacketException("The unwrapped byte array cannot have a length smaller than 10!");
