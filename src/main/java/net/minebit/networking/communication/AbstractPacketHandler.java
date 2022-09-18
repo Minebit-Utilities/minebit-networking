@@ -146,7 +146,8 @@ public abstract class AbstractPacketHandler<SendableType extends AbstractSendabl
 			short index = (short) ConversionHandler.toObject(indexBytes, Short.class);
 			conversationId = (long) ConversionHandler.toObject(conversationBytes, Long.class);
 			ISendableFactory<? extends SendableType> factory = this.registry().getFactory(index);
-			sendable = (SendableType) factory.construct(sendableBytes);
+			sendable = factory.construct();
+			sendable.load(sendableBytes);
 		} catch (ConversionException | SendableException exception) {
 			throw new PacketException("An error occured while obtaining the packet!", exception);
 		}

@@ -1,7 +1,5 @@
 package net.minebit.networking.conversations;
 
-import java.util.Map;
-
 import net.minebit.networking.exceptions.conversations.SendableException;
 
 /**
@@ -22,23 +20,5 @@ public interface ISendableFactory<SendableType extends AbstractSendable> {
 	 * @throws SendableException If an error occurs while constructing the sendable
 	 */
 	public SendableType construct() throws SendableException;
-
-	/**
-	 * This method constructs an {@link AbstractSendable} and loads it's data from
-	 * the given map.
-	 * 
-	 * @return The constructed {@link AbstractSendable}
-	 * @throws SendableException If an error occurs while constructing the sendable
-	 */
-	public SendableType construct(Map<String, Object> input) throws SendableException;
-
-	/**
-	 * This method constructs an {@link AbstractSendable} and loads it's data from
-	 * the given bytes.
-	 * 
-	 * @return The constructed {@link AbstractSendable}
-	 * @throws SendableException If an error occurs while constructing the sendable
-	 */
-	public SendableType construct(byte[] input) throws SendableException;
 
 }
