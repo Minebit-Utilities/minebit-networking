@@ -3,9 +3,6 @@ package net.minebit.networking.conversations.requests;
 import java.util.Map;
 
 import net.minebit.networking.conversations.AbstractSendable;
-import net.minebit.networking.conversations.SendableRegistry;
-import net.minebit.networking.conversations.requests.factories.GetRequestFactory;
-import net.minebit.networking.conversations.requests.factories.SetRequestFactory;
 import net.minebit.networking.exceptions.conversations.RequestException;
 
 /**
@@ -25,30 +22,6 @@ public abstract class AbstractRequest extends AbstractSendable {
 	 */
 	public AbstractRequest() {
 
-	}
-
-	private static final SendableRegistry<AbstractRequest> REQUEST_REGISTRY = new SendableRegistry<>();
-
-	static {
-		AbstractRequest.registerBuildIn();
-	}
-
-	/**
-	 * This method returns the registry that contains all the request types.
-	 * 
-	 * @return The request registry
-	 */
-	public static SendableRegistry<AbstractRequest> getRequestRegistry() {
-		return AbstractRequest.REQUEST_REGISTRY;
-	}
-
-	/**
-	 * This method registers the built in requests to the request registry.
-	 */
-	@SuppressWarnings("deprecation")
-	private static void registerBuildIn() {
-		AbstractRequest.REQUEST_REGISTRY.registerUnchecked((short) 0, GetRequest.class, GetRequestFactory.getInstance());
-		AbstractRequest.REQUEST_REGISTRY.registerUnchecked((short) 1, SetRequest.class, SetRequestFactory.getInstance());
 	}
 
 	/**

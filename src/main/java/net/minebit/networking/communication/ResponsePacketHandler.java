@@ -1,7 +1,8 @@
 package net.minebit.networking.communication;
 
-import net.minebit.networking.conversations.SendableRegistry;
+import net.minebit.networking.conversations.SendableTypeRegistry;
 import net.minebit.networking.conversations.responses.AbstractResponse;
+import net.minebit.networking.conversations.responses.ResponseUtils;
 import net.minebit.networking.wrappers.IWrapper;
 
 /**
@@ -25,8 +26,8 @@ public class ResponsePacketHandler extends AbstractPacketHandler<AbstractRespons
 	}
 
 	@Override
-	protected SendableRegistry<AbstractResponse> registry() {
-		return AbstractResponse.getResponseRegistry();
+	protected SendableTypeRegistry<AbstractResponse> registry() {
+		return ResponseUtils.getResponseTypeRegistry();
 	}
 
 	@Override

@@ -3,10 +3,6 @@ package net.minebit.networking.conversations.responses;
 import java.util.Map;
 
 import net.minebit.networking.conversations.AbstractSendable;
-import net.minebit.networking.conversations.SendableRegistry;
-import net.minebit.networking.conversations.responses.factories.DataResponseFactory;
-import net.minebit.networking.conversations.responses.factories.ErrorResponseFactory;
-import net.minebit.networking.conversations.responses.factories.SuccessResponseFactory;
 import net.minebit.networking.exceptions.conversations.ResponseException;
 
 /**
@@ -24,31 +20,6 @@ public abstract class AbstractResponse extends AbstractSendable {
 	 */
 	public AbstractResponse() {
 
-	}
-
-	private static final SendableRegistry<AbstractResponse> RESPONSE_REGISTRY = new SendableRegistry<>();
-
-	static {
-		AbstractResponse.registerBuildIn();
-	}
-
-	/**
-	 * This method returns the registry that contains all the response types.
-	 * 
-	 * @return The response registry
-	 */
-	public static SendableRegistry<AbstractResponse> getResponseRegistry() {
-		return AbstractResponse.RESPONSE_REGISTRY;
-	}
-
-	/**
-	 * This method registers the built in responses to the response registry.
-	 */
-	@SuppressWarnings("deprecation")
-	private static void registerBuildIn() {
-		AbstractResponse.RESPONSE_REGISTRY.registerUnchecked((short) 0, ErrorResponse.class, ErrorResponseFactory.getInstance());
-		AbstractResponse.RESPONSE_REGISTRY.registerUnchecked((short) 1, SuccessResponse.class, SuccessResponseFactory.getInstance());
-		AbstractResponse.RESPONSE_REGISTRY.registerUnchecked((short) 2, DataResponse.class, DataResponseFactory.getInstance());
 	}
 
 	/**

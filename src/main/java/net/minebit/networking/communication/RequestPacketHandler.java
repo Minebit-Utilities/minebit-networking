@@ -1,7 +1,8 @@
 package net.minebit.networking.communication;
 
-import net.minebit.networking.conversations.SendableRegistry;
+import net.minebit.networking.conversations.SendableTypeRegistry;
 import net.minebit.networking.conversations.requests.AbstractRequest;
+import net.minebit.networking.conversations.requests.RequestUtils;
 import net.minebit.networking.wrappers.IWrapper;
 
 /**
@@ -25,8 +26,8 @@ public class RequestPacketHandler extends AbstractPacketHandler<AbstractRequest>
 	}
 
 	@Override
-	protected SendableRegistry<AbstractRequest> registry() {
-		return AbstractRequest.getRequestRegistry();
+	protected SendableTypeRegistry<AbstractRequest> registry() {
+		return RequestUtils.getRequestTypeRegistry();
 	}
 
 	@Override

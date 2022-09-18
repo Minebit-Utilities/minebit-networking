@@ -15,7 +15,7 @@ import net.minebit.networking.miscellaneous.Pair;
  * @since 0.1
  *
  */
-public class SendableRegistry<SendableType extends AbstractSendable> {
+public class SendableTypeRegistry<SendableType extends AbstractSendable> {
 
 	private final Object mutex;
 
@@ -25,7 +25,7 @@ public class SendableRegistry<SendableType extends AbstractSendable> {
 	 * This constructor constructs a new container for classes of sendables to be
 	 * stored along with their factories.
 	 */
-	public SendableRegistry() {
+	public SendableTypeRegistry() {
 		this.mutex = new Object();
 		this.registryMap = new HashMap<>();
 	}
@@ -74,7 +74,7 @@ public class SendableRegistry<SendableType extends AbstractSendable> {
 	 * @return Whether the registry contains the factory
 	 */
 	@Deprecated
-	public boolean containsFactoryUnchecked(ISendableFactory<? extends SendableType> factory) {
+	private boolean containsFactoryUnchecked(ISendableFactory<? extends SendableType> factory) {
 		for (Pair<ISendableFactory<? extends SendableType>, Short> pair : this.registryMap.values()) {
 			ISendableFactory<? extends SendableType> pairFactory = pair.getFirstObject();
 			if (pairFactory == factory) {
@@ -109,7 +109,7 @@ public class SendableRegistry<SendableType extends AbstractSendable> {
 	 * @return Whether the registry contains the type class
 	 */
 	@Deprecated
-	public boolean containsTypeClassUnchecked(Class<? extends SendableType> typeClass) {
+	private boolean containsTypeClassUnchecked(Class<? extends SendableType> typeClass) {
 		return this.registryMap.containsKey(typeClass);
 	}
 
@@ -156,7 +156,7 @@ public class SendableRegistry<SendableType extends AbstractSendable> {
 	 * @param <InputType>     The class type of the type class and the factory
 	 */
 	@Deprecated
-	public <InputType extends SendableType> void registerUnchecked(short index, Class<InputType> sendableClass, ISendableFactory<InputType> sendableFactory) {
+	private <InputType extends SendableType> void registerUnchecked(short index, Class<InputType> sendableClass, ISendableFactory<InputType> sendableFactory) {
 		Pair<ISendableFactory<? extends SendableType>, Short> registryPair = new Pair<ISendableFactory<? extends SendableType>, Short>(sendableFactory, index);
 		this.registryMap.put(sendableClass, registryPair);
 	}
@@ -187,7 +187,7 @@ public class SendableRegistry<SendableType extends AbstractSendable> {
 	 * @return The associated type class
 	 */
 	@Deprecated
-	public Class<? extends SendableType> getTypeClassUnchecked(short index) {
+	private Class<? extends SendableType> getTypeClassUnchecked(short index) {
 		for (Class<? extends SendableType> typeClass : this.registryMap.keySet()) {
 			Pair<ISendableFactory<? extends SendableType>, Short> pair = this.registryMap.get(typeClass);
 			short pairIndex = pair.getSecondObject();
@@ -222,7 +222,7 @@ public class SendableRegistry<SendableType extends AbstractSendable> {
 	 * @return The associated index
 	 */
 	@Deprecated
-	public short getIndexUnchecked(Class<? extends SendableType> typeClass) {
+	private short getIndexUnchecked(Class<? extends SendableType> typeClass) {
 		Pair<ISendableFactory<? extends SendableType>, Short> pair = this.registryMap.get(typeClass);
 		return pair.getSecondObject();
 	}
@@ -253,7 +253,7 @@ public class SendableRegistry<SendableType extends AbstractSendable> {
 	 * @return The associated factory
 	 */
 	@Deprecated
-	public ISendableFactory<? extends SendableType> getFactoryUnchecked(Class<? extends SendableType> typeClass) {
+	private ISendableFactory<? extends SendableType> getFactoryUnchecked(Class<? extends SendableType> typeClass) {
 		Pair<ISendableFactory<? extends SendableType>, Short> pair = this.registryMap.get(typeClass);
 		return pair.getFirstObject();
 	}
@@ -284,7 +284,7 @@ public class SendableRegistry<SendableType extends AbstractSendable> {
 	 * @return The associated factory
 	 */
 	@Deprecated
-	public ISendableFactory<? extends SendableType> getFactoryUnchecked(short index) {
+	private ISendableFactory<? extends SendableType> getFactoryUnchecked(short index) {
 		for (Pair<ISendableFactory<? extends SendableType>, Short> pair : this.registryMap.values()) {
 			short pairIndex = pair.getSecondObject();
 			if (pairIndex == index) {

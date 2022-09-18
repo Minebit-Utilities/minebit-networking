@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 
 import net.minebit.networking.conversations.AbstractSendable;
 import net.minebit.networking.conversations.ISendableFactory;
-import net.minebit.networking.conversations.SendableRegistry;
+import net.minebit.networking.conversations.SendableTypeRegistry;
 import net.minebit.networking.converting.ConversionHandler;
 import net.minebit.networking.exceptions.communication.PacketException;
 import net.minebit.networking.exceptions.conversations.SendableException;
@@ -44,7 +44,7 @@ public abstract class AbstractPacketHandler<SendableType extends AbstractSendabl
 	 * 
 	 * @return The registry
 	 */
-	protected abstract SendableRegistry<SendableType> registry();
+	protected abstract SendableTypeRegistry<SendableType> registry();
 
 	/**
 	 * This method returns the type class of the given sendable.
