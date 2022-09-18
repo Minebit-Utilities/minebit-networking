@@ -76,7 +76,7 @@ public abstract class AbstractPacketHandler<SendableType extends AbstractSendabl
 		try {
 			sendableIndex = this.registry().getIndex(sendableClass);
 		} catch (SendableRegistryException exception) {
-			throw new PacketException("An error occured while getting the sendable's index!");
+			throw new PacketException("An error occured while getting the sendable's index!", exception);
 		}
 		byte[] indexBytes;
 		byte[] conversationBytes;
