@@ -2,7 +2,7 @@ package net.minebit.networking.wrappers;
 
 import java.nio.ByteBuffer;
 
-import net.minebit.networking.converting.ConversionHandler;
+import net.minebit.networking.converting.primitives.BooleanConverter;
 import net.minebit.networking.exceptions.conversions.ConversionException;
 import net.minebit.networking.exceptions.general.ByteException;
 import net.minebit.networking.exceptions.wrappers.WrapperException;
@@ -48,7 +48,7 @@ public class CompressionWrapper implements IWrapper {
 		}
 		byte[] compressedBytes;
 		try {
-			compressedBytes = ConversionHandler.toBytes(isCompressed);
+			compressedBytes = BooleanConverter.getInstance().toBytes(isCompressed);
 		} catch (ConversionException exception) {
 			throw new WrapperException("An error occured while converting the compression byte!", exception);
 		}
@@ -76,7 +76,7 @@ public class CompressionWrapper implements IWrapper {
 		buffer.get(inputBytes);
 		boolean isCompressed;
 		try {
-			isCompressed = (Boolean) ConversionHandler.toObject(compressionBytes, Boolean.class);
+			isCompressed = BooleanConverter.getInstance().toObject(compressionBytes);
 		} catch (ConversionException exception) {
 			throw new WrapperException("An error occured while converting the compression byte!", exception);
 		}

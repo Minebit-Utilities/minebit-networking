@@ -5,7 +5,8 @@ import java.nio.ByteBuffer;
 import net.minebit.networking.conversations.AbstractSendable;
 import net.minebit.networking.conversations.ISendableFactory;
 import net.minebit.networking.conversations.SendableTypeRegistry;
-import net.minebit.networking.converting.ConversionHandler;
+import net.minebit.networking.converting.primitives.LongConverter;
+import net.minebit.networking.converting.primitives.ShortConverter;
 import net.minebit.networking.exceptions.communication.PacketException;
 import net.minebit.networking.exceptions.conversations.SendableException;
 import net.minebit.networking.exceptions.conversations.SendableRegistryException;
@@ -81,8 +82,8 @@ public abstract class AbstractPacketHandler<SendableType extends AbstractSendabl
 		byte[] conversationBytes;
 		byte[] sendableBytes;
 		try {
-			indexBytes = ConversionHandler.toBytes(sendableIndex);
-			conversationBytes = ConversionHandler.toBytes(conversationId);
+			indexBytes = ShortConverter.getInstance().toBytes(sendableIndex);
+			conversationBytes = LongConverter.getInstance().toBytes(conversationId);
 			sendableBytes = sendable.asBytes();
 		} catch (ConversionException | SendableException exception) {
 			throw new PacketException("An error occured while getting the packet data as bytes!", exception);
@@ -143,8 +144,8 @@ public abstract class AbstractPacketHandler<SendableType extends AbstractSendabl
 		long conversationId;
 		SendableType sendable;
 		try {
-			short index = (short) ConversionHandler.toObject(indexBytes, Short.class);
-			conversationId = (long) ConversionHandler.toObject(conversationBytes, Long.class);
+			short index = (short) ShortConverter.getInstance().toObject(indexBytes);
+			conversationId = (long) LongConverter.getInstance().toObject(conversationBytes);
 			ISendableFactory<? extends SendableType> factory = this.registry().getFactory(index);
 			sendable = factory.construct();
 			sendable.load(sendableBytes);
