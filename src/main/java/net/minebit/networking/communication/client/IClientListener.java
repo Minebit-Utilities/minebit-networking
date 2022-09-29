@@ -14,13 +14,6 @@ import net.minebit.networking.conversations.responses.AbstractResponse;
 public interface IClientListener {
 
 	/**
-	 * This method is invoked when an exception is thrown inside the client loop.
-	 * 
-	 * @param exception The exception thrown
-	 */
-	public void onException(Exception exception);
-
-	/**
 	 * This method is invoked when the client's status changes.
 	 * 
 	 * @param previous The client's status before the change
