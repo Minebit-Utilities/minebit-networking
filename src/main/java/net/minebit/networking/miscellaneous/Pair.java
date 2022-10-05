@@ -56,8 +56,30 @@ public class Pair<FirstType, SecondType> {
 	 */
 	@Override
 	public String toString() {
-		String firstString = firstObject != null ? firstObject.toString() : "NULL";
-		String secondString = secondObject != null ? secondObject.toString() : "NULL";
+		String firstString = firstObject != null ? firstObject.toString() : "null";
+		String secondString = secondObject != null ? secondObject.toString() : "null";
 		return "[" + firstString + "] + [" + secondString + "]";
 	}
+	
+	/**
+	 * This method returns whether the object given is a {@link Pair} with the same contained objects as this one.
+	 * 
+	 * @param obj The object to check whether is the same
+	 * @return Whether the two objects are the same
+	 * @see Object#equals(Object)
+	 */
+	@Override
+	public boolean equals(Object input) {
+		if (this == input) {
+			return true;
+		}
+		if (input instanceof Pair<?, ?>) {
+			Pair<?, ?> inputPair = (Pair<?, ?>) input;
+			Object inputFirstObject = inputPair.getFirstObject();
+			Object inputSecondObject = inputPair.getSecondObject();
+			return (firstObject != null ? inputFirstObject == null : firstObject.equals(inputFirstObject)) && (secondObject != null ? inputSecondObject == null : secondObject.equals(inputSecondObject));
+		}
+		return false;
+	}
+	
 }

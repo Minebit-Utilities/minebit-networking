@@ -19,7 +19,7 @@ public class SendableTypeRegistry<SendableType extends AbstractSendable> {
 
 	private final Object mutex;
 
-	private final Map<Class<? extends SendableType>, Pair<ISendableFactory<? extends SendableType>, Short>> registryMap;
+	private final Map<Class<? extends SendableType>, Pair<ISendableFactory<? extends SendableType>, Integer>> registryMap;
 
 	/**
 	 * This constructor constructs a new container for classes of sendables to be
@@ -37,10 +37,10 @@ public class SendableTypeRegistry<SendableType extends AbstractSendable> {
 	 * @param index The index to check if it is contained
 	 * @return Whether the registry contains the index
 	 */
-	public boolean containsIndex(short index) {
+	public boolean containsIndex(int index) {
 		synchronized (this.mutex) {
-			for (Pair<ISendableFactory<? extends SendableType>, Short> pair : this.registryMap.values()) {
-				short pairIndex = pair.getSecondObject();
+			for (Pair<ISendableFactory<? extends SendableType>, Integer> pair : this.registryMap.values()) {
+				int pairIndex = pair.getSecondObject();
 				if (pairIndex == index) {
 					return true;
 				}
@@ -52,7 +52,7 @@ public class SendableTypeRegistry<SendableType extends AbstractSendable> {
 	/**
 	 * This method returns whether the registry contains the given sendable factory.
 	 * 
-	 * @param index The {@link ISendableFactory} to check if it is contained
+	 * @param factory The {@link ISendableFactory} to check if it is contained
 	 * @return Whether the registry contains the factory
 	 * @throws SendableRegistryException If an error occurs while checking whether
 	 *                                   the factory is contained
@@ -62,32 +62,20 @@ public class SendableTypeRegistry<SendableType extends AbstractSendable> {
 			if (factory == null) {
 				throw new SendableRegistryException("The given factory cannot be NULL!");
 			}
-			return this.containsFactoryUnchecked(factory);
-		}
-	}
-
-	/**
-	 * This method returns whether the registry contains the given sendable factory
-	 * without checking if the given factory is valid.
-	 * 
-	 * @param index The {@link ISendableFactory} to check if it is contained
-	 * @return Whether the registry contains the factory
-	 */
-	@Deprecated
-	private boolean containsFactoryUnchecked(ISendableFactory<? extends SendableType> factory) {
-		for (Pair<ISendableFactory<? extends SendableType>, Short> pair : this.registryMap.values()) {
-			ISendableFactory<? extends SendableType> pairFactory = pair.getFirstObject();
-			if (pairFactory == factory) {
-				return true;
+			for (Pair<ISendableFactory<? extends SendableType>, Integer> pair : this.registryMap.values()) {
+				ISendableFactory<? extends SendableType> pairFactory = pair.getFirstObject();
+				if (pairFactory == factory) {
+					return true;
+				}
 			}
+			return false;
 		}
-		return false;
 	}
 
 	/**
 	 * This method returns whether the registry contains the given type class.
 	 * 
-	 * @param index The type class to check if it is contained
+	 * @param typeClass The type class to check if it is contained
 	 * @return Whether the registry contains the type class
 	 * @throws SendableRegistryException If an error occurs while checking whether
 	 *                                   the type class is contained
@@ -97,20 +85,8 @@ public class SendableTypeRegistry<SendableType extends AbstractSendable> {
 			if (typeClass == null) {
 				throw new SendableRegistryException("The given type class cannot be NULL!");
 			}
-			return this.containsTypeClassUnchecked(typeClass);
+			return this.registryMap.containsKey(typeClass);
 		}
-	}
-
-	/**
-	 * This method returns whether the registry contains the given type class
-	 * without checking if the given class is valid.
-	 * 
-	 * @param index The type class to check if it is contained
-	 * @return Whether the registry contains the type class
-	 */
-	@Deprecated
-	private boolean containsTypeClassUnchecked(Class<? extends SendableType> typeClass) {
-		return this.registryMap.containsKey(typeClass);
 	}
 
 	/**
@@ -125,7 +101,7 @@ public class SendableTypeRegistry<SendableType extends AbstractSendable> {
 	 * @throws SendableRegistryException If an error occurs while registering the
 	 *                                   given objects.
 	 */
-	public <InputType extends SendableType> void register(short index, Class<InputType> sendableClass, ISendableFactory<InputType> sendableFactory) throws SendableRegistryException {
+	public <InputType extends SendableType> void register(int index, Class<InputType> sendableClass, ISendableFactory<InputType> sendableFactory) throws SendableRegistryException {
 		synchronized (this.mutex) {
 			if (sendableClass == null) {
 				throw new SendableRegistryException("The given sendable class cannot be NULL!");
@@ -140,25 +116,9 @@ public class SendableTypeRegistry<SendableType extends AbstractSendable> {
 				throw new SendableRegistryException("An entry with the given index already exists!");
 
 			}
-			this.registerUnchecked(index, sendableClass, sendableFactory);
+			Pair<ISendableFactory<? extends SendableType>, Integer> registryPair = new Pair<ISendableFactory<? extends SendableType>, Integer>(sendableFactory, index);
+			this.registryMap.put(sendableClass, registryPair);
 		}
-	}
-
-	/**
-	 * This method registers the given class with the given index at the registry
-	 * along the construction factory without checking if the given values are
-	 * valid.
-	 * 
-	 * @param index           The index representing the sendable class
-	 * @param sendableClass   The sendable class to register
-	 * @param sendableFactory The construction factory used to construct the
-	 *                        sendable
-	 * @param <InputType>     The class type of the type class and the factory
-	 */
-	@Deprecated
-	private <InputType extends SendableType> void registerUnchecked(short index, Class<InputType> sendableClass, ISendableFactory<InputType> sendableFactory) {
-		Pair<ISendableFactory<? extends SendableType>, Short> registryPair = new Pair<ISendableFactory<? extends SendableType>, Short>(sendableFactory, index);
-		this.registryMap.put(sendableClass, registryPair);
 	}
 
 	/**
@@ -169,62 +129,34 @@ public class SendableTypeRegistry<SendableType extends AbstractSendable> {
 	 * @throws SendableRegistryException If an error occurs while getting the type
 	 *                                   class
 	 */
-	public Class<? extends SendableType> getTypeClass(short index) throws SendableRegistryException {
+	public Class<? extends SendableType> getTypeClass(int index) throws SendableRegistryException {
 		synchronized (this.mutex) {
-			Class<? extends SendableType> result = this.getTypeClassUnchecked(index);
-			if (result == null) {
-				throw new SendableRegistryException("No type class with that index is contained in the registry!");
+			for (Class<? extends SendableType> typeClass : this.registryMap.keySet()) {
+				Pair<ISendableFactory<? extends SendableType>, Integer> pair = this.registryMap.get(typeClass);
+				int pairIndex = pair.getSecondObject();
+				if (pairIndex == index) {
+					return typeClass;
+				}
 			}
-			return result;
+			throw new SendableRegistryException("No type class with that index is contained in the registry!");
 		}
-	}
-
-	/**
-	 * This method returns the type class associated with the given index without
-	 * checking if the given index is valid.
-	 * 
-	 * @param index The index of the type class
-	 * @return The associated type class
-	 */
-	@Deprecated
-	private Class<? extends SendableType> getTypeClassUnchecked(short index) {
-		for (Class<? extends SendableType> typeClass : this.registryMap.keySet()) {
-			Pair<ISendableFactory<? extends SendableType>, Short> pair = this.registryMap.get(typeClass);
-			short pairIndex = pair.getSecondObject();
-			if (pairIndex == index) {
-				return typeClass;
-			}
-		}
-		return null;
 	}
 
 	/**
 	 * This method returns the index associated with the given type class.
 	 * 
-	 * @param index The type class associated with the index
+	 * @param typeClass The type class associated with the index
 	 * @return The associated index
 	 * @throws SendableRegistryException If an error occurs while getting the index
 	 */
-	public short getIndex(Class<? extends SendableType> typeClass) throws SendableRegistryException {
+	public int getIndex(Class<? extends SendableType> typeClass) throws SendableRegistryException {
 		synchronized (this.mutex) {
 			if (!this.containsTypeClass(typeClass)) {
 				throw new SendableRegistryException("The given type class is not contained in the registry!");
 			}
-			return this.getIndexUnchecked(typeClass);
+			Pair<ISendableFactory<? extends SendableType>, Integer> pair = this.registryMap.get(typeClass);
+			return pair.getSecondObject();
 		}
-	}
-
-	/**
-	 * This method returns the index associated with the given type class without
-	 * checking if the given type class is valid.
-	 * 
-	 * @param index The type class associated with the index
-	 * @return The associated index
-	 */
-	@Deprecated
-	private short getIndexUnchecked(Class<? extends SendableType> typeClass) {
-		Pair<ISendableFactory<? extends SendableType>, Short> pair = this.registryMap.get(typeClass);
-		return pair.getSecondObject();
 	}
 
 	/**
@@ -241,21 +173,9 @@ public class SendableTypeRegistry<SendableType extends AbstractSendable> {
 			if (!this.containsTypeClass(typeClass)) {
 				throw new SendableRegistryException("The given type class is not contained in the registry!");
 			}
-			return this.getFactoryUnchecked(typeClass);
+			Pair<ISendableFactory<? extends SendableType>, Integer> pair = this.registryMap.get(typeClass);
+			return pair.getFirstObject();
 		}
-	}
-
-	/**
-	 * This method returns the construction factory associated with the given type
-	 * class without checking if the given class is valid.
-	 * 
-	 * @param typeClass The type class associated with the factory
-	 * @return The associated factory
-	 */
-	@Deprecated
-	private ISendableFactory<? extends SendableType> getFactoryUnchecked(Class<? extends SendableType> typeClass) {
-		Pair<ISendableFactory<? extends SendableType>, Short> pair = this.registryMap.get(typeClass);
-		return pair.getFirstObject();
 	}
 
 	/**
@@ -266,32 +186,16 @@ public class SendableTypeRegistry<SendableType extends AbstractSendable> {
 	 * @throws SendableRegistryException If an error occurs while getting the
 	 *                                   factory
 	 */
-	public ISendableFactory<? extends SendableType> getFactory(short index) throws SendableRegistryException {
+	public ISendableFactory<? extends SendableType> getFactory(int index) throws SendableRegistryException {
 		synchronized (this.mutex) {
-			ISendableFactory<? extends SendableType> result = this.getFactoryUnchecked(index);
-			if (result == null) {
-				throw new SendableRegistryException("The given index is not contained in the registry!");
+			for (Pair<ISendableFactory<? extends SendableType>, Integer> pair : this.registryMap.values()) {
+				int pairIndex = pair.getSecondObject();
+				if (pairIndex == index) {
+					return pair.getFirstObject();
+				}
 			}
-			return result;
+			throw new SendableRegistryException("The given index is not contained in the registry!");
 		}
-	}
-
-	/**
-	 * This method returns the construction factory associated with the given index
-	 * without checking if the given index is valid.
-	 * 
-	 * @param typeClass The index associated with the factory
-	 * @return The associated factory
-	 */
-	@Deprecated
-	private ISendableFactory<? extends SendableType> getFactoryUnchecked(short index) {
-		for (Pair<ISendableFactory<? extends SendableType>, Short> pair : this.registryMap.values()) {
-			short pairIndex = pair.getSecondObject();
-			if (pairIndex == index) {
-				return pair.getFirstObject();
-			}
-		}
-		return null;
 	}
 
 	/**
@@ -299,7 +203,7 @@ public class SendableTypeRegistry<SendableType extends AbstractSendable> {
 	 * 
 	 * @return The registry
 	 */
-	public Map<Class<? extends SendableType>, Pair<ISendableFactory<? extends SendableType>, Short>> getAsMap() {
+	public Map<Class<? extends SendableType>, Pair<ISendableFactory<? extends SendableType>, Integer>> getAsMap() {
 		return Collections.unmodifiableMap(this.registryMap);
 	}
 }

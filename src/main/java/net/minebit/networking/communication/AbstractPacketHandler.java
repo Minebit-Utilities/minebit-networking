@@ -5,8 +5,8 @@ import java.nio.ByteBuffer;
 import net.minebit.networking.conversations.AbstractSendable;
 import net.minebit.networking.conversations.ISendableFactory;
 import net.minebit.networking.conversations.SendableTypeRegistry;
+import net.minebit.networking.converting.primitives.IntegerConverter;
 import net.minebit.networking.converting.primitives.LongConverter;
-import net.minebit.networking.converting.primitives.ShortConverter;
 import net.minebit.networking.exceptions.communication.PacketException;
 import net.minebit.networking.exceptions.conversations.SendableException;
 import net.minebit.networking.exceptions.conversations.SendableRegistryException;
@@ -72,7 +72,7 @@ public abstract class AbstractPacketHandler<SendableType extends AbstractSendabl
 			throw new PacketException("The sendable contained in the pair cannot be NULL!");
 		}
 		Class<? extends SendableType> sendableClass = this.typeClass(sendable);
-		short sendableIndex;
+		int sendableIndex;
 		try {
 			sendableIndex = this.registry().getIndex(sendableClass);
 		} catch (SendableRegistryException exception) {
@@ -82,13 +82,13 @@ public abstract class AbstractPacketHandler<SendableType extends AbstractSendabl
 		byte[] conversationBytes;
 		byte[] sendableBytes;
 		try {
-			indexBytes = ShortConverter.getInstance().toBytes(sendableIndex);
+			indexBytes = IntegerConverter.getInstance().toBytes(sendableIndex);
 			conversationBytes = LongConverter.getInstance().toBytes(conversationId);
 			sendableBytes = sendable.asBytes();
 		} catch (ConversionException | SendableException exception) {
 			throw new PacketException("An error occured while getting the packet data as bytes!", exception);
 		}
-		ByteBuffer buffer = ByteBuffer.allocate(sendableBytes.length + 10);
+		ByteBuffer buffer = ByteBuffer.allocate(sendableBytes.length + 12);
 		buffer.put(indexBytes);
 		buffer.put(conversationBytes);
 		buffer.put(sendableBytes);
@@ -131,12 +131,12 @@ public abstract class AbstractPacketHandler<SendableType extends AbstractSendabl
 		} catch (WrapperException exception) {
 			throw new PacketException("An error occured while trying to unwrap the packet!", exception);
 		}
-		if (unwrapped.length < 10) {
-			throw new PacketException("The unwrapped byte array cannot have a length smaller than 10!");
+		if (unwrapped.length < 12) {
+			throw new PacketException("The unwrapped byte array cannot have a length smaller than 12!");
 		}
-		byte[] indexBytes = new byte[2];
+		byte[] indexBytes = new byte[4];
 		byte[] conversationBytes = new byte[8];
-		byte[] sendableBytes = new byte[unwrapped.length - 10];
+		byte[] sendableBytes = new byte[unwrapped.length - 12];
 		ByteBuffer buffer = ByteBuffer.wrap(unwrapped);
 		buffer.get(indexBytes);
 		buffer.get(conversationBytes);
@@ -144,7 +144,7 @@ public abstract class AbstractPacketHandler<SendableType extends AbstractSendabl
 		long conversationId;
 		SendableType sendable;
 		try {
-			short index = (short) ShortConverter.getInstance().toObject(indexBytes);
+			int index = IntegerConverter.getInstance().toObject(indexBytes);
 			conversationId = (long) LongConverter.getInstance().toObject(conversationBytes);
 			ISendableFactory<? extends SendableType> factory = this.registry().getFactory(index);
 			sendable = factory.construct();
