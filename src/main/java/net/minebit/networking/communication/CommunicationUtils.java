@@ -16,13 +16,15 @@ import net.minebit.networking.exceptions.communication.CommunicationException;
  */
 public final class CommunicationUtils {
 
-	public static final byte CLIENT_CONNECT = 0x01;
-	public static final	byte CLIENT_REQUEST = 0x02;
-	public static final byte CLIENT_UPDATE = 0x03;
-
-	public static final byte SERVER_LOGIN = 0x11;
-	public static final byte SERVER_ERROR = 0x12;
-	public static final byte SERVER_DATA = 0x13;
+	public static final byte CLIENT_INITIATE_LOGIN = 0x01;
+	public static final	byte CLIENT_SEND_REQUEST = 0x02;
+	public static final byte CLIENT_REQUEST_UPDATE = 0x03;
+	public static final	byte CLIENT_SEND_REQUEST_AND_AWAIT = 0x04;
+	
+	public static final byte SERVER_COMPLETE_LOGIN = 0x11;
+	public static final byte SERVER_SEND_ERROR = 0x12;
+	public static final byte SERVER_SEND_DATA = 0x13;
+	public static final byte SERVER_CONFIRM_REQUEST = 0x14;
 	
 	private CommunicationUtils() {
 	}

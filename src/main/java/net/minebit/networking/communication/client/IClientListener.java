@@ -19,7 +19,7 @@ public interface IClientListener {
 	 * @param previous The client's status before the change
 	 * @param current  The client's status after the change
 	 */
-	public void onStatusChange(EClientStatus previous, EClientStatus current);
+	public void onStatusChanged(EClientStatus previous, EClientStatus current);
 
 	/**
 	 * This method is invoked whenever a response is received from the server.
@@ -28,5 +28,17 @@ public interface IClientListener {
 	 * @param recievedResponse The received response.
 	 */
 	public void onResponseRecieved(AbstractRequest sourceRequest, AbstractResponse recievedResponse);
+
+	/**
+	 * This method is invoked whenever an error is received from the server.
+	 * 
+	 * @param description The description of the error.
+	 */
+	public void onServerErrorOccured(String description);
+
+	/**
+	 * This method is invoked when the client login is completed.
+	 */
+	public void onLoginCompleted();
 
 }

@@ -3,7 +3,9 @@ package net.minebit.networking.communication.client;
 import java.net.InetSocketAddress;
 
 import net.minebit.networking.conversations.requests.AbstractRequest;
+import net.minebit.networking.conversations.responses.AbstractResponse;
 import net.minebit.networking.exceptions.communication.client.ClientException;
+import net.minebit.networking.miscellaneous.IHandler;
 
 /**
  * This interface represents a client taking part in a client server web
@@ -38,7 +40,7 @@ public interface IClient {
 	 * @param handler What should happen when the request's response is received.
 	 * @throws ClientException If an error occurs while sending the request.
 	 */
-	public void sendRequest(AbstractRequest request, IResponseHandler handler) throws ClientException;	
+	public void sendRequest(AbstractRequest request, IHandler<AbstractResponse> handler) throws ClientException;	
 	
 	/**
 	 * This method returns the current status of the client.
