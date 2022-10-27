@@ -16,6 +16,11 @@ public enum EClientStatus {
 	DISABLED,
 
 	/**
+	 * There is no active connection but there is an active session.
+	 */
+	STANDBY,
+	
+	/**
 	 * The client is currently doing nothing but is enabled.
 	 * 
 	 */
