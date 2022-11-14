@@ -1,6 +1,4 @@
-package net.minebit.networking.exceptions.wrappers;
-
-import net.minebit.networking.exceptions.LibraryException;
+package net.minebit.networking.exceptions;
 
 /**
  * {@link WrapperException} is a {@link LibraryException} that is thrown whenever

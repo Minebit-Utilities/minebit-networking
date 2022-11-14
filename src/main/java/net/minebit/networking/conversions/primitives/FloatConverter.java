@@ -1,7 +1,7 @@
-package net.minebit.networking.converting.primitives;
+package net.minebit.networking.conversions.primitives;
 
-import net.minebit.networking.converting.IConverter;
-import net.minebit.networking.exceptions.conversions.ConversionException;
+import net.minebit.networking.conversions.IConverter;
+import net.minebit.networking.exceptions.ConversionException;
 
 /**
  * This class handles the conversion of floats to byte arrays and vice versa.

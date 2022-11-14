@@ -2,10 +2,10 @@ package net.minebit.networking.wrappers;
 
 import java.nio.ByteBuffer;
 
-import net.minebit.networking.converting.primitives.BooleanConverter;
-import net.minebit.networking.exceptions.conversions.ConversionException;
-import net.minebit.networking.exceptions.general.ByteException;
-import net.minebit.networking.exceptions.wrappers.WrapperException;
+import net.minebit.networking.conversions.primitives.BooleanConverter;
+import net.minebit.networking.exceptions.ByteException;
+import net.minebit.networking.exceptions.ConversionException;
+import net.minebit.networking.exceptions.WrapperException;
 import net.minebit.networking.miscellaneous.ByteUtils;
 
 /**

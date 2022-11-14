@@ -5,13 +5,13 @@ import java.nio.ByteBuffer;
 import net.minebit.networking.conversations.AbstractSendable;
 import net.minebit.networking.conversations.ISendableFactory;
 import net.minebit.networking.conversations.SendableTypeRegistry;
-import net.minebit.networking.converting.primitives.IntegerConverter;
-import net.minebit.networking.converting.primitives.LongConverter;
+import net.minebit.networking.conversions.primitives.IntegerConverter;
+import net.minebit.networking.conversions.primitives.LongConverter;
+import net.minebit.networking.exceptions.ConversionException;
+import net.minebit.networking.exceptions.WrapperException;
 import net.minebit.networking.exceptions.communication.PacketException;
 import net.minebit.networking.exceptions.conversations.SendableException;
 import net.minebit.networking.exceptions.conversations.SendableRegistryException;
-import net.minebit.networking.exceptions.conversions.ConversionException;
-import net.minebit.networking.exceptions.wrappers.WrapperException;
 import net.minebit.networking.miscellaneous.Pair;
 import net.minebit.networking.wrappers.IWrapper;
 

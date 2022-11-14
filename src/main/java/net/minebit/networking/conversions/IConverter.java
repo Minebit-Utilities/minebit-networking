@@ -1,6 +1,6 @@
-package net.minebit.networking.converting;
+package net.minebit.networking.conversions;
 
-import net.minebit.networking.exceptions.conversions.ConversionException;
+import net.minebit.networking.exceptions.ConversionException;
 
 /**
  * This interface defines how an object can be converted to a byte array and

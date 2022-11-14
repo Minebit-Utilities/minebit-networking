@@ -1,6 +1,4 @@
-package net.minebit.networking.exceptions.conversions;
-
-import net.minebit.networking.exceptions.LibraryException;
+package net.minebit.networking.exceptions;
 
 /**
  * {@link ConversionException} is a {@link LibraryException} that is thrown

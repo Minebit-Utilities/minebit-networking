@@ -1,6 +1,6 @@
 package net.minebit.networking.wrappers;
 
-import net.minebit.networking.exceptions.wrappers.WrapperException;
+import net.minebit.networking.exceptions.WrapperException;
 
 /**
  * This interface represents a wrapper that can be wrapped over byte arrays in

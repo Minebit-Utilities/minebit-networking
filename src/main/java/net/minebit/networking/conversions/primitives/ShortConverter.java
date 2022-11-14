@@ -1,8 +1,8 @@
-package net.minebit.networking.converting.primitives;
+package net.minebit.networking.conversions.primitives;
 
-import net.minebit.networking.converting.IConverter;
-import net.minebit.networking.exceptions.conversions.ConversionException;
-import net.minebit.networking.exceptions.general.ByteException;
+import net.minebit.networking.conversions.IConverter;
+import net.minebit.networking.exceptions.ByteException;
+import net.minebit.networking.exceptions.ConversionException;
 import net.minebit.networking.miscellaneous.ByteUtils;
 
 /**

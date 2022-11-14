@@ -1,6 +1,4 @@
-package net.minebit.networking.exceptions.general;
-
-import net.minebit.networking.exceptions.LibraryException;
+package net.minebit.networking.exceptions;
 
 /**
  * {@link ByteException} is a {@link LibraryException} that is thrown whenever

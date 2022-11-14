@@ -1,4 +1,4 @@
-package net.minebit.networking.converting;
+package net.minebit.networking.conversions;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import net.minebit.networking.exceptions.conversions.ConversionException;
+import net.minebit.networking.exceptions.ConversionException;
 
 /**
  * This class handles the conversion of objects to byte arrays and vice versa

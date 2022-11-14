@@ -5,7 +5,7 @@ import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
-import net.minebit.networking.exceptions.general.ByteException;
+import net.minebit.networking.exceptions.ByteException;
 
 /**
  * The {@link ByteUtils} class contains several methods which are used
