@@ -132,7 +132,7 @@ public abstract class AbstractClient {
 				throw new ClientException("The client is not enabled!");
 			}
 			this.disconnect();
-			this.status = EClientStatus.STANDBY;
+			this.setStatus(EClientStatus.STANDBY);
 		}
 	}
 
@@ -149,7 +149,7 @@ public abstract class AbstractClient {
 			}
 			this.connect();
 			this.relogin();
-			this.status = EClientStatus.ENABLED;
+			this.setStatus(EClientStatus.ENABLED);
 		}
 	}
 
@@ -188,6 +188,9 @@ public abstract class AbstractClient {
 				} catch (ConversionException exception) {
 					throw new ClientException("An error occured while converting the client id bytes!", exception);
 				}
+				if (this.listener != null) {
+					this.listener.onLoginCompleted();
+				}
 			} else {
 				try {
 					this.handleError();
@@ -221,7 +224,11 @@ public abstract class AbstractClient {
 			} catch (ClientException exception) {
 				throw new ClientException("An error occured while checking the re-login success!", exception);
 			}
-			if (!success) {
+			if (success) {
+				if (this.listener != null) {
+					this.listener.onLoginCompleted();
+				}
+			} else {
 				try {
 					this.handleError();
 				} catch (ClientException exception) {
