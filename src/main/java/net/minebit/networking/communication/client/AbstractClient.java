@@ -314,7 +314,7 @@ public abstract class AbstractClient {
 	 * 
 	 * @param listener The new client's listener
 	 */
-	protected final void setListener(IClientListener listener) {
+	public final void setListener(IClientListener listener) {
 		synchronized (this.mutex) {
 			this.listener = listener;
 		}
