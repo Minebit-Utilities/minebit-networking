@@ -19,21 +19,11 @@ public enum EClientStatus {
 	 * There is no active connection but there is an active session.
 	 */
 	STANDBY,
-	
+
 	/**
-	 * The client is currently doing nothing but is enabled.
+	 * The client is currently enabled.
 	 * 
 	 */
-	IDLE,
-
-	/**
-	 * The client is currently reading from the connected server.
-	 */
-	READING,
-
-	/**
-	 * The client is currently writing to the connected server.
-	 */
-	WRITING;
+	ENABLED;
 
 }
