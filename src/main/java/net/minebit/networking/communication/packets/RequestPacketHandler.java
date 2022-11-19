@@ -1,4 +1,4 @@
-package net.minebit.networking.communication;
+package net.minebit.networking.communication.packets;
 
 import net.minebit.networking.conversations.SendableTypeRegistry;
 import net.minebit.networking.conversations.requests.AbstractRequest;

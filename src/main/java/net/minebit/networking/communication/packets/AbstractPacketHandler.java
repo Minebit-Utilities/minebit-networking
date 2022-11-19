@@ -1,4 +1,4 @@
-package net.minebit.networking.communication;
+package net.minebit.networking.communication.packets;
 
 import java.nio.ByteBuffer;
 
@@ -6,13 +6,11 @@ import net.minebit.networking.conversations.AbstractSendable;
 import net.minebit.networking.conversations.ISendableFactory;
 import net.minebit.networking.conversations.SendableTypeRegistry;
 import net.minebit.networking.conversions.primitives.IntegerConverter;
-import net.minebit.networking.conversions.primitives.LongConverter;
 import net.minebit.networking.exceptions.ConversionException;
 import net.minebit.networking.exceptions.WrapperException;
 import net.minebit.networking.exceptions.communication.PacketException;
 import net.minebit.networking.exceptions.conversations.SendableException;
 import net.minebit.networking.exceptions.conversations.SendableRegistryException;
-import net.minebit.networking.miscellaneous.Pair;
 import net.minebit.networking.wrappers.IWrapper;
 
 /**
@@ -55,21 +53,15 @@ public abstract class AbstractPacketHandler<SendableType extends AbstractSendabl
 	protected abstract Class<? extends SendableType> typeClass(SendableType sendable);
 
 	/**
-	 * This method returns the packet as a byte array and compresses it if necessary
-	 * and allowed.
+	 * This method returns the packet as a byte array while having applied the given wrappers.
 	 * 
-	 * @param pair The pair representing the packet
+	 * @param sendable The sendable representing the packet
 	 * @return The packet as bytes
 	 * @throws PacketException If an error occurs while getting the packet as bytes
 	 */
-	public byte[] asBytes(Pair<SendableType, Long> pair) throws PacketException {
-		if (pair == null) {
-			throw new PacketException("The given pair cannot be NULL!");
-		}
-		long conversationId = pair.getSecondObject();
-		SendableType sendable = pair.getFirstObject();
+	public byte[] asBytes(SendableType sendable) throws PacketException {
 		if (sendable == null) {
-			throw new PacketException("The sendable contained in the pair cannot be NULL!");
+			throw new PacketException("The sendable cannot be NULL!");
 		}
 		Class<? extends SendableType> sendableClass = this.typeClass(sendable);
 		int sendableIndex;
@@ -79,18 +71,15 @@ public abstract class AbstractPacketHandler<SendableType extends AbstractSendabl
 			throw new PacketException("An error occured while getting the sendable's index!", exception);
 		}
 		byte[] indexBytes;
-		byte[] conversationBytes;
 		byte[] sendableBytes;
 		try {
 			indexBytes = IntegerConverter.getInstance().toBytes(sendableIndex);
-			conversationBytes = LongConverter.getInstance().toBytes(conversationId);
 			sendableBytes = sendable.asBytes();
 		} catch (ConversionException | SendableException exception) {
 			throw new PacketException("An error occured while getting the packet data as bytes!", exception);
 		}
-		ByteBuffer buffer = ByteBuffer.allocate(sendableBytes.length + 12);
+		ByteBuffer buffer = ByteBuffer.allocate(sendableBytes.length + 4);
 		buffer.put(indexBytes);
-		buffer.put(conversationBytes);
 		buffer.put(sendableBytes);
 		byte[] result = buffer.array();
 		try {
@@ -111,11 +100,11 @@ public abstract class AbstractPacketHandler<SendableType extends AbstractSendabl
 	 * This method returns the packet generated from the given byte array.
 	 * 
 	 * @param bytes The byte array to load the packet from
-	 * @return The packet as a pair
+	 * @return The packet as a sendable
 	 * @throws PacketException If an error occurs while getting the packet from the
 	 *                         given bytes
 	 */
-	public Pair<SendableType, Long> asPair(byte[] bytes) throws PacketException {
+	public SendableType asSendable(byte[] bytes) throws PacketException {
 		if (bytes == null) {
 			throw new PacketException("The given byte array cannot be NULL!");
 		}
@@ -131,28 +120,24 @@ public abstract class AbstractPacketHandler<SendableType extends AbstractSendabl
 		} catch (WrapperException exception) {
 			throw new PacketException("An error occured while trying to unwrap the packet!", exception);
 		}
-		if (unwrapped.length < 12) {
+		if (unwrapped.length < 4) {
 			throw new PacketException("The unwrapped byte array cannot have a length smaller than 12!");
 		}
 		byte[] indexBytes = new byte[4];
-		byte[] conversationBytes = new byte[8];
-		byte[] sendableBytes = new byte[unwrapped.length - 12];
+		byte[] sendableBytes = new byte[unwrapped.length - 4];
 		ByteBuffer buffer = ByteBuffer.wrap(unwrapped);
 		buffer.get(indexBytes);
-		buffer.get(conversationBytes);
 		buffer.get(sendableBytes);
-		long conversationId;
 		SendableType sendable;
 		try {
 			int index = IntegerConverter.getInstance().toObject(indexBytes);
-			conversationId = (long) LongConverter.getInstance().toObject(conversationBytes);
 			ISendableFactory<? extends SendableType> factory = this.registry().getFactory(index);
 			sendable = factory.construct();
 			sendable.load(sendableBytes);
 		} catch (ConversionException | SendableException exception) {
 			throw new PacketException("An error occured while obtaining the packet!", exception);
 		}
-		return new Pair<SendableType, Long>(sendable, conversationId);
+		return sendable;
 	}
 
 }

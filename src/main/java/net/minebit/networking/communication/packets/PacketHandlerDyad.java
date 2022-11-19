@@ -1,4 +1,4 @@
-package net.minebit.networking.communication;
+package net.minebit.networking.communication.packets;
 
 import net.minebit.networking.wrappers.IWrapper;
 
@@ -24,7 +24,7 @@ public class PacketHandlerDyad {
 		this.requestPacketHandler = new RequestPacketHandler(wrappers);
 		this.responsePacketHandler = new ResponsePacketHandler(wrappers);
 	}
-
+	
 	/**
 	 * This method returns the {@link RequestPacketHandler} of the dyad.
 	 * 

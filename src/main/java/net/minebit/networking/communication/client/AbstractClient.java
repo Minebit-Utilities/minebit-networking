@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
 import net.minebit.networking.communication.CommunicationReference;
-import net.minebit.networking.communication.PacketHandlerDyad;
+import net.minebit.networking.communication.packets.PacketHandlerDyad;
 import net.minebit.networking.conversations.requests.AbstractRequest;
 import net.minebit.networking.conversions.primitives.IntegerConverter;
 import net.minebit.networking.conversions.primitives.LongConverter;
@@ -76,13 +76,13 @@ public abstract class AbstractClient {
 			if (this.status != EClientStatus.DISABLED) {
 				throw new ClientException("There is already an open session!");
 			}
-			this.setStatus(EClientStatus.ENABLED);
 			try {
 				this.connect();
 				this.login();
 			} catch (ClientException exception) {
 				throw new ClientException("An error occured while connecting and logging in!", exception);
 			}
+			this.setStatus(EClientStatus.ENABLED);
 			if (this.toggling) {
 				try {
 					this.standby();
@@ -116,6 +116,7 @@ public abstract class AbstractClient {
 			} catch (ClientException exception) {
 				throw new ClientException("An error occured while logging out and disconnecting!", exception);
 			}
+			this.setStatus(EClientStatus.DISABLED);
 		}
 	}
 
