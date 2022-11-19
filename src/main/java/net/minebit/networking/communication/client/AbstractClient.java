@@ -4,13 +4,18 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.util.HashMap;
 
 import net.minebit.networking.communication.CommunicationReference;
 import net.minebit.networking.communication.packets.PacketHandlerDyad;
+import net.minebit.networking.communication.packets.RequestPacketHandler;
+import net.minebit.networking.communication.packets.ResponsePacketHandler;
 import net.minebit.networking.conversations.requests.AbstractRequest;
+import net.minebit.networking.conversations.responses.AbstractResponse;
 import net.minebit.networking.conversions.primitives.IntegerConverter;
 import net.minebit.networking.conversions.primitives.LongConverter;
 import net.minebit.networking.exceptions.ConversionException;
+import net.minebit.networking.exceptions.communication.PacketException;
 import net.minebit.networking.exceptions.communication.client.ClientException;
 
 /**
@@ -21,12 +26,13 @@ import net.minebit.networking.exceptions.communication.client.ClientException;
  * @since 0.1
  *
  */
-public abstract class AbstractClient {
+public class AbstractClient {
 
 	private final Object mutex = new Object();
 	private final InetSocketAddress address;
 	private final boolean toggling;
 	private final PacketHandlerDyad handlers;
+	private final HashMap<Long, AbstractRequest> requests = new HashMap<>();
 
 	private EClientStatus status = EClientStatus.DISABLED;
 	private SocketChannel channel;
@@ -155,14 +161,6 @@ public abstract class AbstractClient {
 	}
 
 	/**
-	 * This method sends the given request to the connected server.
-	 * 
-	 * @param request The request to send to the connected server.
-	 * @throws ClientException If an error occurs while sending the request.
-	 */
-	public abstract void sendRequest(AbstractRequest request) throws ClientException;
-
-	/**
 	 * This method logins to the given server for the first time.
 	 * 
 	 * @throws ClientException If an error occurs while logging in the server.
@@ -251,6 +249,188 @@ public abstract class AbstractClient {
 			} catch (ClientException exception) {
 				throw new ClientException("An error occured while sending the logout code!", exception);
 			}
+		}
+	}
+
+	/**
+	 * This method sends the given request to the connected server and awaits for an
+	 * immediate response.
+	 * 
+	 * @param request The request to send to the connected server.
+	 * @throws ClientException If an error occurs while sending the request.
+	 */
+	public void sendSynchronous(AbstractRequest request) throws ClientException {
+		if (request == null) {
+			throw new ClientException("The given request cannot be NULL!");
+		}
+		try {
+			this.sendRaw(CommunicationReference.CLIENT_SEND_SYNCHRONOUS);
+			this.sendRequest(request);
+		} catch (ClientException exception) {
+			throw new ClientException("An error occured while sending the request!", exception);
+		}
+		boolean success;
+		try {
+			success = this.checkMarker();
+		} catch (ClientException exception) {
+			throw new ClientException("An error occured while checking the re-login success!", exception);
+		}
+		if (success) {
+			try {
+				AbstractResponse response = this.readResponse();
+				if (this.listener != null) {
+					this.listener.onResponseRecieved(request, response);
+				}
+			} catch (ClientException exception) {
+				throw new ClientException("An error occured while reading the remote response!", exception);
+			}
+		} else {
+			try {
+				this.handleError();
+			} catch (ClientException exception) {
+				throw new ClientException("An error occured while handling the server error!", exception);
+			}
+		}
+	}
+
+	/**
+	 * This method sends the given asynchronous request to the connected server. No
+	 * response will be received afterwards.
+	 * 
+	 * @param request The request to send to the connected server.
+	 * @throws ClientException If an error occurs while sending the request.
+	 */
+	public void sendAsynchronous(AbstractRequest request) throws ClientException {
+		if (request == null) {
+			throw new ClientException("The given request cannot be NULL!");
+		}
+		try {
+			this.sendRaw(CommunicationReference.CLIENT_SEND_ASYNCHRONOUS);
+			this.sendRequest(request);
+		} catch (ClientException exception) {
+			throw new ClientException("An error occured while sending the request!", exception);
+		}
+		boolean success;
+		try {
+			success = this.checkMarker();
+		} catch (ClientException exception) {
+			throw new ClientException("An error occured while checking the re-login success!", exception);
+		}
+		if (success) {
+			byte[] idBytes = this.readRaw(8);
+			long id;
+			try {
+				id = LongConverter.getInstance().toObject(idBytes);
+			} catch (ConversionException exception) {
+				throw new ClientException("An error occured while converting the request's conversation id!", exception);
+			}
+			this.requests.put(id, request);
+		} else {
+			try {
+				this.handleError();
+			} catch (ClientException exception) {
+				throw new ClientException("An error occured while handling the server error!", exception);
+			}
+		}
+	}
+
+	/**
+	 * This method asks the server for all completed responses for the send
+	 * asynchronous requests that have not already updated yet.
+	 * 
+	 * @throws ClientException If an error occurs while getting the asynchronous
+	 *                         responses.
+	 */
+	public void updateAsynchronous() throws ClientException {
+		try {
+			this.sendRaw(CommunicationReference.CLIENT_REQUEST_UPDATE);
+		} catch (ClientException exception) {
+			throw new ClientException("An error occured while sending the update code!", exception);
+		}
+		boolean success;
+		try {
+			success = this.checkMarker();
+		} catch (ClientException exception) {
+			throw new ClientException("An error occured while checking the re-login success!", exception);
+		}
+		if (success) {
+			byte[] countBytes = this.readRaw(8);
+			long count;
+			try {
+				count = LongConverter.getInstance().toObject(countBytes);
+			} catch (ConversionException exception) {
+				throw new ClientException("An error occured while checking the getting the response count!", exception);
+			}
+			for (long repeats = 1; repeats <= count; repeats++) {
+				try {
+					byte[] idBytes = this.readRaw(8);
+					long id;
+					try {
+						id = LongConverter.getInstance().toObject(idBytes);
+					} catch (ConversionException exception) {
+						throw new ClientException("An error occured while converting the request's conversation id!", exception);
+					}
+					AbstractResponse response = this.readResponse();
+					AbstractRequest request = this.requests.get(id);
+					this.requests.remove(id);
+					if (this.listener != null) {
+						this.listener.onResponseRecieved(request, response);
+					}
+				} catch (ClientException exception) {
+					throw new ClientException("An error occured while reading the response No." + 1 + "!", exception);
+				}
+			}
+		} else {
+			try {
+				this.handleError();
+			} catch (ClientException exception) {
+				throw new ClientException("An error occured while handling the server error!", exception);
+			}
+		}
+	}
+
+	/**
+	 * This method sends the given request to the connected server.
+	 * 
+	 * @param request The request to send to the connected server.
+	 * @throws ClientException If an error occurs while sending the request.
+	 */
+	protected void sendRequest(AbstractRequest request) throws ClientException {
+		RequestPacketHandler handler = this.handlers.getRequestPacketHandler();
+		try {
+			byte[] requestBytes = handler.asBytes(request);
+			byte[] lengthBytes = IntegerConverter.getInstance().toBytes(requestBytes.length);
+			this.sendRaw(lengthBytes);
+			this.sendRaw(requestBytes);
+		} catch (ClientException exception) {
+			throw new ClientException("An error occured while transmitting the request!", exception);
+		} catch (PacketException exception) {
+			throw new ClientException("An error occured while getting the request as a byte array!", exception);
+		} catch (ConversionException exception) {
+			throw new ClientException("An error occured while converting the byte array's length!", exception);
+		}
+	}
+
+	/**
+	 * This method reads the next response from the connected server.
+	 * 
+	 * @return The response read from the server
+	 * @throws ClientException If an error occurs while reading the response.
+	 */
+	protected AbstractResponse readResponse() throws ClientException {
+		try {
+			byte[] lengthBytes = this.readRaw(4);
+			int length = IntegerConverter.getInstance().toObject(lengthBytes);
+			byte[] responseBytes = this.readRaw(length);
+			ResponsePacketHandler handler = this.handlers.getResponsePacketHandler();
+			AbstractResponse response = handler.asSendable(responseBytes);
+			return response;
+		} catch (ClientException exception) {
+			throw new ClientException("An error occured while reading the received bytes!", exception);
+		} catch (ConversionException exception) {
+			throw new ClientException("An error occured while converting the byte array's length!", exception);
+		} catch (PacketException exception) {
+			throw new ClientException("An error occured while getting the response from the byte array!", exception);
 		}
 	}
 
