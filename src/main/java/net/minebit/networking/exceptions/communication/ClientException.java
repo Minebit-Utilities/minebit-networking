@@ -1,6 +1,4 @@
-package net.minebit.networking.exceptions.communication.client;
-
-import net.minebit.networking.exceptions.communication.CommunicationException;
+package net.minebit.networking.exceptions.communication;
 
 /**
  * {@link ClientException} is a {@link CommunicationException} that is thrown whenever

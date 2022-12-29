@@ -15,8 +15,9 @@ import net.minebit.networking.conversations.responses.AbstractResponse;
 import net.minebit.networking.conversions.primitives.IntegerConverter;
 import net.minebit.networking.conversions.primitives.LongConverter;
 import net.minebit.networking.exceptions.ConversionException;
+import net.minebit.networking.exceptions.communication.ClientException;
 import net.minebit.networking.exceptions.communication.PacketException;
-import net.minebit.networking.exceptions.communication.client.ClientException;
+import net.minebit.networking.wrappers.CompressionWrapper;
 
 /**
  * This class represents a client taking part in a client-server web
@@ -30,7 +31,6 @@ public class AbstractClient {
 
 	private final Object mutex = new Object();
 	private final InetSocketAddress address;
-	private final boolean toggling;
 	private final PacketHandlerDyad handlers;
 	private final HashMap<Long, AbstractRequest> requests = new HashMap<>();
 
@@ -47,7 +47,7 @@ public class AbstractClient {
 	 * @throws ClientException If an error occurs while initializing the client.
 	 */
 	public AbstractClient(InetSocketAddress address) throws ClientException {
-		this(address, true, new PacketHandlerDyad());
+		this(address, new PacketHandlerDyad(CompressionWrapper.getInstance()));
 	}
 
 	/**
@@ -55,11 +55,9 @@ public class AbstractClient {
 	 * communication.
 	 * 
 	 * @param address  The address of the server to connect the client to.
-	 * @param toggling Whether to disconnect from the server after each transmission
-	 *                 or reception of data.
 	 * @throws ClientException If an error occurs while initializing the client.
 	 */
-	public AbstractClient(InetSocketAddress address, boolean toggling, PacketHandlerDyad handlers) throws ClientException {
+	public AbstractClient(InetSocketAddress address, PacketHandlerDyad handlers) throws ClientException {
 		if (address == null) {
 			throw new ClientException("The given address cannot be NULL!");
 		}
@@ -67,7 +65,6 @@ public class AbstractClient {
 			throw new ClientException("The given handler dyad cannot be NULL!");
 		}
 		this.address = address;
-		this.toggling = toggling;
 		this.handlers = handlers;
 	}
 
@@ -89,13 +86,6 @@ public class AbstractClient {
 				throw new ClientException("An error occured while connecting and logging in!", exception);
 			}
 			this.setStatus(EClientStatus.ENABLED);
-			if (this.toggling) {
-				try {
-					this.standby();
-				} catch (ClientException exception) {
-					throw new ClientException("An error occured while standing by!", exception);
-				}
-			}
 		}
 	}
 
@@ -106,15 +96,12 @@ public class AbstractClient {
 	 */
 	public void stop() throws ClientException {
 		synchronized (this.mutex) {
-			if (this.status == EClientStatus.DISABLED) {
-				throw new ClientException("The client is already stopped!");
-			}
-			if (this.getStatus() == EClientStatus.STANDBY) {
-				try {
-					this.wake();
-				} catch (ClientException exception) {
-					throw new ClientException("An error occured while waking the client!", exception);
-				}
+			switch (this.status) {
+				case DISABLED:
+					throw new ClientException("The client is already stopped!");
+				case STANDBY:
+					throw new ClientException("The client is standing by!");
+				default:
 			}
 			try {
 				this.logout();
@@ -263,6 +250,14 @@ public class AbstractClient {
 		if (request == null) {
 			throw new ClientException("The given request cannot be NULL!");
 		}
+		switch (this.getStatus()) {
+			case DISABLED:
+				throw new ClientException("The client is currently disabled!");
+			case STANDBY:
+				throw new ClientException("The client is currently standing by!");
+			default:
+				break;
+		}
 		try {
 			this.sendRaw(CommunicationReference.CLIENT_SEND_SYNCHRONOUS);
 			this.sendRequest(request);
@@ -304,6 +299,14 @@ public class AbstractClient {
 		if (request == null) {
 			throw new ClientException("The given request cannot be NULL!");
 		}
+		switch (this.getStatus()) {
+			case DISABLED:
+				throw new ClientException("The client is currently disabled!");
+			case STANDBY:
+				throw new ClientException("The client is currently standing by!");
+			default:
+				break;
+		}
 		try {
 			this.sendRaw(CommunicationReference.CLIENT_SEND_ASYNCHRONOUS);
 			this.sendRequest(request);
@@ -342,6 +345,14 @@ public class AbstractClient {
 	 *                         responses.
 	 */
 	public void updateAsynchronous() throws ClientException {
+		switch (this.getStatus()) {
+			case DISABLED:
+				throw new ClientException("The client is currently disabled!");
+			case STANDBY:
+				throw new ClientException("The client is currently standing by!");
+			default:
+				break;
+		}
 		try {
 			this.sendRaw(CommunicationReference.CLIENT_REQUEST_UPDATE);
 		} catch (ClientException exception) {
@@ -515,16 +526,6 @@ public class AbstractClient {
 	 */
 	public final InetSocketAddress getAddress() {
 		return this.address;
-	}
-
-	/**
-	 * This method returns whether the client's communication is set in toggling
-	 * mode or not.
-	 * 
-	 * @return Whether the client is in toggling mode
-	 */
-	public final boolean isToggling() {
-		return this.toggling;
 	}
 
 	/**
