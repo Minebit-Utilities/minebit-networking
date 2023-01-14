@@ -27,7 +27,7 @@ import net.minebit.networking.wrappers.CompressionWrapper;
  * @since 0.1
  *
  */
-public class AbstractClient {
+public class Client {
 
 	private final Object mutex = new Object();
 	private final InetSocketAddress address;
@@ -46,7 +46,7 @@ public class AbstractClient {
 	 * @param address The address of the server to connect the client to.
 	 * @throws ClientException If an error occurs while initializing the client.
 	 */
-	public AbstractClient(InetSocketAddress address) throws ClientException {
+	public Client(InetSocketAddress address) throws ClientException {
 		this(address, new PacketHandlerDyad(CompressionWrapper.getInstance()));
 	}
 
@@ -54,10 +54,11 @@ public class AbstractClient {
 	 * This constructor constructs a new client that takes part in a web
 	 * communication.
 	 * 
-	 * @param address  The address of the server to connect the client to.
+	 * @param address The address of the server to connect the client to.
+	 * @param handlers The pair of handlers used to convert sendables to bytes and vice versa.
 	 * @throws ClientException If an error occurs while initializing the client.
 	 */
-	public AbstractClient(InetSocketAddress address, PacketHandlerDyad handlers) throws ClientException {
+	public Client(InetSocketAddress address, PacketHandlerDyad handlers) throws ClientException {
 		if (address == null) {
 			throw new ClientException("The given address cannot be NULL!");
 		}
@@ -110,6 +111,7 @@ public class AbstractClient {
 				throw new ClientException("An error occured while logging out and disconnecting!", exception);
 			}
 			this.setStatus(EClientStatus.DISABLED);
+			this.requests.clear();
 		}
 	}
 
@@ -247,43 +249,45 @@ public class AbstractClient {
 	 * @throws ClientException If an error occurs while sending the request.
 	 */
 	public void sendSynchronous(AbstractRequest request) throws ClientException {
-		if (request == null) {
-			throw new ClientException("The given request cannot be NULL!");
-		}
-		switch (this.getStatus()) {
-			case DISABLED:
-				throw new ClientException("The client is currently disabled!");
-			case STANDBY:
-				throw new ClientException("The client is currently standing by!");
-			default:
-				break;
-		}
-		try {
-			this.sendRaw(CommunicationReference.CLIENT_SEND_SYNCHRONOUS);
-			this.sendRequest(request);
-		} catch (ClientException exception) {
-			throw new ClientException("An error occured while sending the request!", exception);
-		}
-		boolean success;
-		try {
-			success = this.checkMarker();
-		} catch (ClientException exception) {
-			throw new ClientException("An error occured while checking the re-login success!", exception);
-		}
-		if (success) {
-			try {
-				AbstractResponse response = this.readResponse();
-				if (this.listener != null) {
-					this.listener.onResponseRecieved(request, response);
-				}
-			} catch (ClientException exception) {
-				throw new ClientException("An error occured while reading the remote response!", exception);
+		synchronized (this.mutex) {
+			if (request == null) {
+				throw new ClientException("The given request cannot be NULL!");
 			}
-		} else {
+			switch (this.getStatus()) {
+				case DISABLED:
+					throw new ClientException("The client is currently disabled!");
+				case STANDBY:
+					throw new ClientException("The client is currently standing by!");
+				default:
+					break;
+			}
 			try {
-				this.handleError();
+				this.sendRaw(CommunicationReference.CLIENT_SEND_SYNCHRONOUS);
+				this.sendRequest(request);
 			} catch (ClientException exception) {
-				throw new ClientException("An error occured while handling the server error!", exception);
+				throw new ClientException("An error occured while sending the request!", exception);
+			}
+			boolean success;
+			try {
+				success = this.checkMarker();
+			} catch (ClientException exception) {
+				throw new ClientException("An error occured while checking the re-login success!", exception);
+			}
+			if (success) {
+				try {
+					AbstractResponse response = this.readResponse();
+					if (this.listener != null) {
+						this.listener.onResponseRecieved(request, response);
+					}
+				} catch (ClientException exception) {
+					throw new ClientException("An error occured while reading the remote response!", exception);
+				}
+			} else {
+				try {
+					this.handleError();
+				} catch (ClientException exception) {
+					throw new ClientException("An error occured while handling the server error!", exception);
+				}
 			}
 		}
 	}
@@ -296,43 +300,45 @@ public class AbstractClient {
 	 * @throws ClientException If an error occurs while sending the request.
 	 */
 	public void sendAsynchronous(AbstractRequest request) throws ClientException {
-		if (request == null) {
-			throw new ClientException("The given request cannot be NULL!");
-		}
-		switch (this.getStatus()) {
-			case DISABLED:
-				throw new ClientException("The client is currently disabled!");
-			case STANDBY:
-				throw new ClientException("The client is currently standing by!");
-			default:
-				break;
-		}
-		try {
-			this.sendRaw(CommunicationReference.CLIENT_SEND_ASYNCHRONOUS);
-			this.sendRequest(request);
-		} catch (ClientException exception) {
-			throw new ClientException("An error occured while sending the request!", exception);
-		}
-		boolean success;
-		try {
-			success = this.checkMarker();
-		} catch (ClientException exception) {
-			throw new ClientException("An error occured while checking the re-login success!", exception);
-		}
-		if (success) {
-			byte[] idBytes = this.readRaw(8);
-			long id;
-			try {
-				id = LongConverter.getInstance().toObject(idBytes);
-			} catch (ConversionException exception) {
-				throw new ClientException("An error occured while converting the request's conversation id!", exception);
+		synchronized (this.mutex) {
+			if (request == null) {
+				throw new ClientException("The given request cannot be NULL!");
 			}
-			this.requests.put(id, request);
-		} else {
+			switch (this.getStatus()) {
+				case DISABLED:
+					throw new ClientException("The client is currently disabled!");
+				case STANDBY:
+					throw new ClientException("The client is currently standing by!");
+				default:
+					break;
+			}
 			try {
-				this.handleError();
+				this.sendRaw(CommunicationReference.CLIENT_SEND_ASYNCHRONOUS);
+				this.sendRequest(request);
 			} catch (ClientException exception) {
-				throw new ClientException("An error occured while handling the server error!", exception);
+				throw new ClientException("An error occured while sending the request!", exception);
+			}
+			boolean success;
+			try {
+				success = this.checkMarker();
+			} catch (ClientException exception) {
+				throw new ClientException("An error occured while checking the re-login success!", exception);
+			}
+			if (success) {
+				byte[] idBytes = this.readRaw(8);
+				long id;
+				try {
+					id = LongConverter.getInstance().toObject(idBytes);
+				} catch (ConversionException exception) {
+					throw new ClientException("An error occured while converting the request's conversation id!", exception);
+				}
+				this.requests.put(id, request);
+			} else {
+				try {
+					this.handleError();
+				} catch (ClientException exception) {
+					throw new ClientException("An error occured while handling the server error!", exception);
+				}
 			}
 		}
 	}
@@ -345,57 +351,59 @@ public class AbstractClient {
 	 *                         responses.
 	 */
 	public void updateAsynchronous() throws ClientException {
-		switch (this.getStatus()) {
-			case DISABLED:
-				throw new ClientException("The client is currently disabled!");
-			case STANDBY:
-				throw new ClientException("The client is currently standing by!");
-			default:
-				break;
-		}
-		try {
-			this.sendRaw(CommunicationReference.CLIENT_REQUEST_UPDATE);
-		} catch (ClientException exception) {
-			throw new ClientException("An error occured while sending the update code!", exception);
-		}
-		boolean success;
-		try {
-			success = this.checkMarker();
-		} catch (ClientException exception) {
-			throw new ClientException("An error occured while checking the re-login success!", exception);
-		}
-		if (success) {
-			byte[] countBytes = this.readRaw(8);
-			long count;
-			try {
-				count = LongConverter.getInstance().toObject(countBytes);
-			} catch (ConversionException exception) {
-				throw new ClientException("An error occured while checking the getting the response count!", exception);
+		synchronized (this.mutex) {
+			switch (this.getStatus()) {
+				case DISABLED:
+					throw new ClientException("The client is currently disabled!");
+				case STANDBY:
+					throw new ClientException("The client is currently standing by!");
+				default:
+					break;
 			}
-			for (long repeats = 1; repeats <= count; repeats++) {
-				try {
-					byte[] idBytes = this.readRaw(8);
-					long id;
-					try {
-						id = LongConverter.getInstance().toObject(idBytes);
-					} catch (ConversionException exception) {
-						throw new ClientException("An error occured while converting the request's conversation id!", exception);
-					}
-					AbstractResponse response = this.readResponse();
-					AbstractRequest request = this.requests.get(id);
-					this.requests.remove(id);
-					if (this.listener != null) {
-						this.listener.onResponseRecieved(request, response);
-					}
-				} catch (ClientException exception) {
-					throw new ClientException("An error occured while reading the response No." + 1 + "!", exception);
-				}
-			}
-		} else {
 			try {
-				this.handleError();
+				this.sendRaw(CommunicationReference.CLIENT_REQUEST_UPDATE);
 			} catch (ClientException exception) {
-				throw new ClientException("An error occured while handling the server error!", exception);
+				throw new ClientException("An error occured while sending the update code!", exception);
+			}
+			boolean success;
+			try {
+				success = this.checkMarker();
+			} catch (ClientException exception) {
+				throw new ClientException("An error occured while checking the re-login success!", exception);
+			}
+			if (success) {
+				byte[] countBytes = this.readRaw(8);
+				long count;
+				try {
+					count = LongConverter.getInstance().toObject(countBytes);
+				} catch (ConversionException exception) {
+					throw new ClientException("An error occured while checking the getting the response count!", exception);
+				}
+				for (long repeats = 1; repeats <= count; repeats++) {
+					try {
+						byte[] idBytes = this.readRaw(8);
+						long id;
+						try {
+							id = LongConverter.getInstance().toObject(idBytes);
+						} catch (ConversionException exception) {
+							throw new ClientException("An error occured while converting the request's conversation id!", exception);
+						}
+						AbstractResponse response = this.readResponse();
+						AbstractRequest request = this.requests.get(id);
+						this.requests.remove(id);
+						if (this.listener != null) {
+							this.listener.onResponseRecieved(request, response);
+						}
+					} catch (ClientException exception) {
+						throw new ClientException("An error occured while reading the response No." + 1 + "!", exception);
+					}
+				}
+			} else {
+				try {
+					this.handleError();
+				} catch (ClientException exception) {
+					throw new ClientException("An error occured while handling the server error!", exception);
+				}
 			}
 		}
 	}
