@@ -1,5 +1,7 @@
 package net.minebit.networking.communication.server;
 
+import java.net.SocketAddress;
+
 import net.minebit.networking.conversations.requests.AbstractRequest;
 import net.minebit.networking.conversations.responses.AbstractResponse;
 
@@ -37,5 +39,20 @@ public interface IServerListener {
 	 * @param exception The exception thrown
 	 */
 	public void onException(Exception exception);
+
+	/**
+	 * This method is invoked whenever a client connects to the server.
+	 * 
+	 * @param address The address of the client
+	 * @param id      The id of the client
+	 */
+	public void onClientConnected(SocketAddress address, long id);
+
+	/**
+	 * This method is invoked whenever a client logs out of the server.
+	 * 
+	 * @param id The id of the client
+	 */
+	public void onClientLoggedOut(long id);
 
 }

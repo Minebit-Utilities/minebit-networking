@@ -178,6 +178,9 @@ public class Server {
 			}
 			this.channel = null;
 			this.selector = null;
+			this.cache.clear();
+			this.requests.clear();
+			this.responses.clear();
 		}
 	}
 
@@ -212,16 +215,20 @@ public class Server {
 	 * @throws ServerException If an error occurs while reading the data
 	 */
 	protected void readData(SelectionKey key) throws ServerException {
-		if (key.attachment() == null || !(key.attachment() instanceof Long)) {
+		if (key.attachment() == null) {
 			while (this.cache.containsKey(this.lastClientId)) {
 				this.lastClientId++;
+				System.out.println("Id: " + lastClientId);
 			}
-			key.attach(this.lastClientId);
+			key.attach(Long.valueOf(this.lastClientId));
 			this.cache.put(this.lastClientId, new ArrayList<>());
 		}
 		long id = (Long) key.attachment();
 		SocketChannel channel = (SocketChannel) key.channel();
 		List<byte[]> cache = this.cache.get(id);
+		if (cache == null) {
+			return;
+		}
 		switch (cache.size()) {
 			case 0: {
 				Pair<byte[], Boolean> data = this.readRaw(channel, 1);
@@ -241,14 +248,20 @@ public class Server {
 						}
 						this.sendRaw(channel, CommunicationReference.SERVER_SUCCESS);
 						this.sendRaw(channel, isBytes);
+						try {
+							this.listener.onClientConnected(channel.getRemoteAddress(), id);
+						} catch (IOException exception) {
+							throw new ServerException("An error occured while getting the client address!", exception);
+						}
 						break conditionIn;
 					case CommunicationReference.CLIENT_END_SESSION:
 						this.cache.remove(id);
 						this.responses.remove(id);
+						this.listener.onClientLoggedOut(id);
 						break conditionIn;
 					case CommunicationReference.CLIENT_REQUEST_UPDATE:
 						try {
-							byte[] countBytes = LongConverter.getInstance().toBytes((long) this.responses.size());
+							byte[] countBytes = LongConverter.getInstance().toBytes((long) this.responses.get(id).size());
 							this.sendRaw(channel, CommunicationReference.SERVER_SUCCESS);
 							this.sendRaw(channel, countBytes);
 							for (Pair<Long, AbstractResponse> responsePair : this.responses.get(id)) {
@@ -291,7 +304,7 @@ public class Server {
 						} catch (ConversionException exception) {
 							throw new ServerException("An error occured while converting new client id!", exception);
 						}
-						key.attach(newId);
+						key.attach(Long.valueOf(newId));
 						this.sendRaw(channel, CommunicationReference.SERVER_SUCCESS);
 					default:
 						this.cache.get(key.attachment()).clear();
@@ -337,6 +350,13 @@ public class Server {
 						this.lastConversationId++;
 					}
 					long conversationId = lastConversationId;
+					byte[] conversationBytes;
+					try {
+						conversationBytes = LongConverter.getInstance().toBytes(conversationId);
+					} catch (ConversionException exception) {
+						throw new ServerException("An error occured while converting the conversation id!", exception);
+					}
+					this.sendRaw(channel, conversationBytes);
 					this.requests.put(conversationId, id);
 					this.listener.onAsynchronousRequestRecieved(request, conversationId);
 				}
