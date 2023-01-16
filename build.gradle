@@ -25,7 +25,7 @@ repositories {
 }
 
 jar {
-	version = '0.1' 
+	version = 'v0.2.0-beta' 
 	destinationDir = file("exports/")
 	from sourceSets.main.java.srcDirs
 }
