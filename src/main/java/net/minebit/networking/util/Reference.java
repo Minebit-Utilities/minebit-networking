@@ -44,6 +44,9 @@ public final class Reference {
 	 */
 	public static final String GIT;
 
+	/**
+	 * The location of the info file in the project resources.
+	 */
 	private static final String INFO_FILE = "/info.xml";
 
 	static {
