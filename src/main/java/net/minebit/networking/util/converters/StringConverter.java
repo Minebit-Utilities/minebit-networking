@@ -38,7 +38,7 @@ public class StringConverter implements IConverter<String> {
 	}
 
 	/**
-	 * This method converts the given byte[] and returns the resultant
+	 * This method converts the given byte array and returns the resultant
 	 * {@link String} in an {@link Optional}. If the given byte array is NULL then
 	 * an empty optional will be returned.
 	 */

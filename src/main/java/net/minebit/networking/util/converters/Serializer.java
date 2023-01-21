@@ -46,7 +46,7 @@ public final class Serializer implements IConverter<Object> {
 		ObjectOutputStream objectStream;
 		try {
 			objectStream = new ObjectOutputStream(byteStream);
-			objectStream.writeObject(objectStream);
+			objectStream.writeObject(input);
 		} catch (IOException exception) {
 			return Optional.empty();
 		}
@@ -54,7 +54,7 @@ public final class Serializer implements IConverter<Object> {
 	}
 
 	/**
-	 * This method deserializes the given byte[] and returns the resultant
+	 * This method deserializes the given byte array and returns the resultant
 	 * {@link Object} in an {@link Optional}. If the given byte array could not be
 	 * deserialized then an empty optional will be returned.
 	 */
