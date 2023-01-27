@@ -82,6 +82,7 @@ public final class ByteUtils {
 	 * 
 	 * @param partA The first component of the merge
 	 * @param partB The second component of the merge
+	 * @see #enlarge(byte[], int, int)
 	 * @return The resultant byte array
 	 */
 	public static Optional<byte[]> merge(byte[] partA, byte[] partB) {
@@ -94,7 +95,7 @@ public final class ByteUtils {
 		}
 		byte[] result = enlarged.get();
 		for (int counter = 0; counter < partB.length; counter++) {
-			result[counter + partB.length] = partA[counter];
+			result[counter + partA.length] = partB[counter];
 		}
 		return Optional.of(result);
 	}
@@ -117,6 +118,31 @@ public final class ByteUtils {
 			result[count] = source[count];
 		}
 		return Optional.of(result);
+	}
+
+	/**
+	 * This method places the elements of the given place array at the start
+	 * position of the given source array until they end or the end of the source
+	 * array has been reached. If the either of the arrays is NULL, the position is
+	 * larger or equal to the length of the source array or the position is negative
+	 * the operation will be marked as failed.
+	 * 
+	 * @param source   The source array to place the new array on
+	 * @param place    The array to place on the source array
+	 * @param position The position to start placing the elements
+	 * @return The success of the operation
+	 */
+	public static boolean overwrite(byte[] source, byte[] place, int position) {
+		if (source == null || place == null || position >= source.length || position < 0) {
+			return false;
+		}
+		for (int count = position; count < source.length; count++) {
+			if (count >= place.length + position) {
+				break;
+			}
+			source[count] = place[count - position];
+		}
+		return true;
 	}
 
 }
