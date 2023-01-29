@@ -20,6 +20,11 @@ import java.util.Optional;
 public final class Serializer implements IConverter<Object> {
 
 	/**
+	 * The unique id of the converter's container
+	 */
+	public static final byte ID = 0x01;
+	
+	/**
 	 * The only instance of the {@link Serializer} object.
 	 */
 	public static final Serializer INSTANCE = new Serializer();

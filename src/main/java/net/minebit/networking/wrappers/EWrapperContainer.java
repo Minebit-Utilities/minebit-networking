@@ -13,7 +13,7 @@ import java.util.Optional;
  */
 public enum EWrapperContainer {
 
-	COMPRESSION((byte) 0x00, CompressionWrapper.INSTANCE);
+	COMPRESSION(CompressionWrapper.ID, CompressionWrapper.INSTANCE);
 
 	private final byte id;
 	private final IWrapper wrapper;

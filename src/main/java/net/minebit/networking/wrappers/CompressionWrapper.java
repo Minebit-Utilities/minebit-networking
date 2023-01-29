@@ -17,6 +17,11 @@ import java.util.zip.Inflater;
 public class CompressionWrapper implements IWrapper {
 
 	/**
+	 * The unique id of the wrapper's container
+	 */
+	public static final byte ID = 0x00;
+	
+	/**
 	 * The only instance of the {@link CompressionWrapper} object.
 	 */
 	public static final CompressionWrapper INSTANCE = new CompressionWrapper();

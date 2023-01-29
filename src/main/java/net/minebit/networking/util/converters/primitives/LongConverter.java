@@ -17,6 +17,11 @@ import net.minebit.networking.util.converters.IConverter;
 public class LongConverter implements IConverter<Long> {
 
 	/**
+	 * The unique id of the converter's container
+	 */
+	public static final byte ID = 0x06;
+	
+	/**
 	 * The only instance of the {@link LongConverter} object.
 	 */
 	public static final LongConverter INSTANCE = new LongConverter();

@@ -9,7 +9,7 @@ import net.minebit.networking.exceptions.IllegalConstructionException;
  * throughout the project.
  * 
  * @author Aggelowe
- * @since v0.1.0-beta
+ * @since v0.2.0-beta
  *
  */
 public final class ByteUtils {

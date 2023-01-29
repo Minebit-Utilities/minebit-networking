@@ -16,6 +16,11 @@ import net.minebit.networking.util.converters.IConverter;
 public class FloatConverter implements IConverter<Float> {
 
 	/**
+	 * The unique id of the converter's container
+	 */
+	public static final byte ID = 0x07;
+	
+	/**
 	 * The only instance of the {@link FloatConverter} object.
 	 */
 	public static final FloatConverter INSTANCE = new FloatConverter();

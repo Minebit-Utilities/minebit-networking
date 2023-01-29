@@ -16,6 +16,11 @@ import net.minebit.networking.util.converters.IConverter;
 public class ByteConverter implements IConverter<Byte> {
 
 	/**
+	 * The unique id of the converter's container
+	 */
+	public static final byte ID = 0x03;
+	
+	/**
 	 * The only instance of the {@link ByteConverter} object.
 	 */
 	public static final ByteConverter INSTANCE = new ByteConverter();

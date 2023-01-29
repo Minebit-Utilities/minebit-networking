@@ -17,6 +17,11 @@ import net.minebit.networking.util.converters.IConverter;
 public class CharacterConverter implements IConverter<Character> {
 
 	/**
+	 * The unique id of the converter's container
+	 */
+	public static final byte ID = 0x09;
+	
+	/**
 	 * The only instance of the {@link CharacterConverter} object.
 	 */
 	public static final CharacterConverter INSTANCE = new CharacterConverter();

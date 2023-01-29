@@ -17,6 +17,11 @@ import net.minebit.networking.util.converters.IConverter;
 public class ShortConverter implements IConverter<Short> {
 
 	/**
+	 * The unique id of the converter's container
+	 */
+	public static final byte ID = 0x04;
+	
+	/**
 	 * The only instance of the {@link ShortConverter} object.
 	 */
 	public static final ShortConverter INSTANCE = new ShortConverter();

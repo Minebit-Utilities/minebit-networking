@@ -16,6 +16,11 @@ import net.minebit.networking.util.converters.IConverter;
 public class DoubleConverter implements IConverter<Double> {
 
 	/**
+	 * The unique id of the converter's container
+	 */
+	public static final byte ID = 0x08;
+	
+	/**
 	 * The only instance of the {@link DoubleConverter} object.
 	 */
 	public static final DoubleConverter INSTANCE = new DoubleConverter();

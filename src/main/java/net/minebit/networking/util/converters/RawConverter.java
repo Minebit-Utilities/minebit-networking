@@ -14,6 +14,11 @@ import java.util.Optional;
 public final class RawConverter implements IConverter<byte[]> {
 
 	/**
+	 * The unique id of the converter's container
+	 */
+	public static final byte ID = 0x00;
+	
+	/**
 	 * The only instance of the {@link RawConverter} object.
 	 */
 	public static final RawConverter INSTANCE = new RawConverter();

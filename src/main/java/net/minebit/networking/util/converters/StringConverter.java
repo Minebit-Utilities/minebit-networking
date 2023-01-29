@@ -15,6 +15,11 @@ import java.util.Optional;
 public class StringConverter implements IConverter<String> {
 
 	/**
+	 * The unique id of the converter's container
+	 */
+	public static final byte ID = 0x02;
+	
+	/**
 	 * The only instance of the {@link StringConverter} object.
 	 */
 	public static final StringConverter INSTANCE = new StringConverter();
