@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 
 import net.minebit.networking.util.ByteUtils;
+import net.minebit.networking.util.IBytable;
 import net.minebit.networking.util.converters.EConverterContainer;
 import net.minebit.networking.util.converters.IConverter;
 import net.minebit.networking.util.converters.StringConverter;
@@ -25,7 +26,7 @@ import net.minebit.networking.util.converters.primitives.IntegerConverter;
  * @since v0.2.0-beta
  *
  */
-public final class Message {
+public final class Message implements IBytable {
 
 	private final String title;
 	private final Map<String, Object> map;
@@ -71,7 +72,7 @@ public final class Message {
 	 * 
 	 * @return The message as a byte array
 	 */
-	public byte[] bytes() {
+	public Optional<byte[]> bytes() {
 		byte[] titleBytes = StringConverter.INSTANCE.sourceToBytes(this.title).orElse(new byte[0]);
 		int titleSize = titleBytes.length, valueNumber = map.size();
 		byte[] result = new byte[8 + titleSize];
@@ -112,7 +113,7 @@ public final class Message {
 		}
 		byte[] valueNumberBytes = IntegerConverter.INSTANCE.sourceToBytes(valueNumber).get();
 		ByteUtils.overwrite(result, valueNumberBytes, titleSize + 4);
-		return result;
+		return Optional.of(result);
 	}
 
 }

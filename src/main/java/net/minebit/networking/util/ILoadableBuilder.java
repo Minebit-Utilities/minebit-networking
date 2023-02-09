@@ -9,7 +9,7 @@ package net.minebit.networking.util;
  * @param <OutputType> The type of object that may be build using the builder
  */
 
-public interface ILoadableBuilder<OutputType> extends IBuilder<OutputType> {
+public interface ILoadableBuilder<OutputType extends IBytable> extends IBuilder<OutputType> {
 
 	/**
 	 * This method decodes the given byte array and replaces the current data with
