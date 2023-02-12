@@ -9,7 +9,7 @@ import java.util.Optional;
  * 
  * @author Aggelowe
  * @since v0.2.0-beta
- * @param <OutputType> The type of object that may be build using the builder
+ * @param <OutputType> The type of object that may be built using the builder
  */
 public interface IBuilder<OutputType> {
 
