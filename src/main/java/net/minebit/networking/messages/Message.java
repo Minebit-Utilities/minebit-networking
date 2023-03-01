@@ -32,7 +32,7 @@ public final class Message implements IBytable {
 	private final Map<String, Object> map;
 
 	/**
-	 * This constructs a new {@link Message} that represents a message sent from a
+	 * This constructor constructs a new {@link Message} that represents a message sent from a
 	 * server to a client and the opposite.
 	 * 
 	 * @param title The "title" of the message

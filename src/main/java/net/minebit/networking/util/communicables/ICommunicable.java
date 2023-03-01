@@ -12,5 +12,12 @@ import net.minebit.networking.util.IBytable;
  *
  */
 public interface ICommunicable extends IBytable {
-	
+
+	/**
+	 * This method returns the unique id of the builder of the communicable.
+	 * 
+	 * @return The communicable's type id
+	 */
+	public byte getBuilderId();
+
 }

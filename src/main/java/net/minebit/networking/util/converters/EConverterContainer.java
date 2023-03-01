@@ -22,7 +22,18 @@ import net.minebit.networking.util.converters.primitives.ShortConverter;
  */
 public enum EConverterContainer {
 
-	RAW(RawConverter.ID, RawConverter.INSTANCE), SERIALIZER(Serializer.ID, Serializer.INSTANCE), STRING(StringConverter.ID, StringConverter.INSTANCE), BYTE(ByteConverter.ID, ByteConverter.INSTANCE), SHORT(ShortConverter.ID, ShortConverter.INSTANCE), INTEGER(IntegerConverter.ID, IntegerConverter.INSTANCE), LONG(LongConverter.ID, LongConverter.INSTANCE), FLOAT(FloatConverter.ID, FloatConverter.INSTANCE), DOUBLE(DoubleConverter.ID, DoubleConverter.INSTANCE), CHARACTER(CharacterConverter.ID, CharacterConverter.INSTANCE);
+	// @formatter:off
+	RAW(RawConverter.ID, RawConverter.INSTANCE),
+	SERIALIZER(Serializer.ID, Serializer.INSTANCE),
+	STRING(StringConverter.ID, StringConverter.INSTANCE),
+	BYTE(ByteConverter.ID, ByteConverter.INSTANCE),
+	SHORT(ShortConverter.ID, ShortConverter.INSTANCE),
+	INTEGER(IntegerConverter.ID, IntegerConverter.INSTANCE),
+	LONG(LongConverter.ID, LongConverter.INSTANCE),
+	FLOAT(FloatConverter.ID, FloatConverter.INSTANCE),
+	DOUBLE(DoubleConverter.ID, DoubleConverter.INSTANCE),
+	CHARACTER(CharacterConverter.ID, CharacterConverter.INSTANCE);
+	// @formatter:on
 
 	private final byte id;
 	private final IConverter<?> converter;
