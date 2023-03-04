@@ -6,7 +6,7 @@ import net.minebit.networking.requests.IRequest;
 
 /**
  * This class represents an {@link IRequest} sent to a server by a client,
- * requesting the creation of a new session and also the means to convert the
+ * requesting the creation of a new session and also contains the means to convert the
  * request into an array of bytes.
  * 
  * @author Aggelowe

@@ -23,7 +23,7 @@ public class SessionResumeRequestBuilder implements IRequestBuilder {
 	public static final byte ID = 0x02;
 
 	private final Object mutex = new Object();
-	
+
 	private int sessionId = 0;
 
 	/**
@@ -58,14 +58,14 @@ public class SessionResumeRequestBuilder implements IRequestBuilder {
 
 	@Override
 	public boolean load(byte[] data) {
-		synchronized (this.mutex) {
-			Optional<Integer> sessionIdOptional = IntegerConverter.INSTANCE.bytesToSource(data);
-			if (!sessionIdOptional.isPresent()) {
-				return false;
-			}
-			this.sessionId = sessionIdOptional.get();
-			return true;
+		Optional<Integer> sessionIdOptional = IntegerConverter.INSTANCE.bytesToSource(data);
+		if (!sessionIdOptional.isPresent()) {
+			return false;
 		}
+		synchronized (this.mutex) {
+			this.sessionId = sessionIdOptional.get();
+		}
+		return true;
 	}
 
 	@Override

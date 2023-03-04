@@ -2,6 +2,12 @@ package net.minebit.networking.requests;
 
 import java.util.Optional;
 
+import net.minebit.networking.requests.message.asynchronous.MessageAsynchronousRequestBuilder;
+import net.minebit.networking.requests.message.asynchronous.MessageAsynchronousRequestGuide;
+import net.minebit.networking.requests.message.synchronous.MessageSynchronousRequestBuilder;
+import net.minebit.networking.requests.message.synchronous.MessageSynchronousRequestGuide;
+import net.minebit.networking.requests.message.update.MessageUpdateRequestBuilder;
+import net.minebit.networking.requests.message.update.MessageUpdateRequestGuide;
 import net.minebit.networking.requests.session.create.SessionCreateRequestBuilder;
 import net.minebit.networking.requests.session.create.SessionCreateRequestGuide;
 import net.minebit.networking.requests.session.end.SessionEndRequestBuilder;
@@ -25,7 +31,10 @@ public enum ERequestBuilderContainer {
 	// @formatter:off
 	SESSION_CREATE(SessionCreateRequestBuilder.ID, SessionCreateRequestGuide.INSTANCE),
 	SESSION_END(SessionEndRequestBuilder.ID, SessionEndRequestGuide.INSTANCE),
-	SESSION_RESUME(SessionResumeRequestBuilder.ID, SessionResumeRequestGuide.INSTANCE);
+	SESSION_RESUME(SessionResumeRequestBuilder.ID, SessionResumeRequestGuide.INSTANCE),
+	MESSAGE_UPDATE(MessageUpdateRequestBuilder.ID, MessageUpdateRequestGuide.INSTANCE),
+	MESSAGE_SYNCHRONOUS(MessageSynchronousRequestBuilder.ID, MessageSynchronousRequestGuide.INSTANCE),
+	MESSAGE_ASYNCHRONOUS(MessageAsynchronousRequestBuilder.ID, MessageAsynchronousRequestGuide.INSTANCE);
 	// @formatter:on
 
 	private final byte id;

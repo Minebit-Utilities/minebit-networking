@@ -7,7 +7,7 @@ import net.minebit.networking.util.converters.primitives.IntegerConverter;
 
 /**
  * This class represents an {@link IRequest} sent to a server by a client,
- * requesting the continuation of a previously created session and also the
+ * requesting the continuation of a previously created session and also contains the
  * means to convert the request into an array of bytes.
  * 
  * @author Aggelowe
@@ -20,7 +20,7 @@ public class SessionResumeRequest implements IRequest {
 	/**
 	 * This constructor constructs a new {@link SessionResumeRequest} that
 	 * represents a request to continue an old session sent from a client to the
-	 * sever
+	 * server.
 	 * 
 	 * @param sessionId The id of the session to continue
 	 */

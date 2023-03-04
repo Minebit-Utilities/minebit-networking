@@ -6,7 +6,7 @@ import net.minebit.networking.requests.IRequestBuilder;
 import net.minebit.networking.requests.IRequestGuide;
 
 /**
- * This class represents a builder used to build {@link SessionEndRequest}s by
+ * This class represents a guide used to build {@link SessionEndRequest}s by
  * taking the provided information and parsing it into a newly constructed
  * instance.
  * 

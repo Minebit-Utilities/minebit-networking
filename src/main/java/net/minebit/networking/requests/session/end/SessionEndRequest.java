@@ -6,7 +6,7 @@ import net.minebit.networking.requests.IRequest;
 
 /**
  * This class represents an {@link IRequest} sent to a server by a client,
- * requesting the deletion of the current session and also the means to convert
+ * requesting the deletion of the current session and also contains the means to convert
  * the request into an array of bytes.
  * 
  * @author Aggelowe

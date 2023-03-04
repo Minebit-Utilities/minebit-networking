@@ -77,10 +77,10 @@ public class MessageBuilder implements ILoadableBuilder<Message> {
 	 */
 	@Override
 	public Optional<Message> build() {
+		if (this.title == null) {
+			return Optional.empty();
+		}
 		synchronized (this.mutex) {
-			if (this.title == null) {
-				return Optional.empty();
-			}
 			return Optional.of(new Message(this.title, this.map));
 		}
 	}
@@ -92,60 +92,62 @@ public class MessageBuilder implements ILoadableBuilder<Message> {
 	 */
 	@Override
 	public boolean load(byte[] data) {
-		synchronized (this.mutex) {
-			Optional<byte[]> titleSizeBytes = ByteUtils.rip(data, 0, 3);
-			if (!titleSizeBytes.isPresent()) {
+		Optional<byte[]> titleSizeBytes = ByteUtils.rip(data, 0, 3);
+		if (!titleSizeBytes.isPresent()) {
+			return false;
+		}
+		int titleSize = IntegerConverter.INSTANCE.bytesToSource(titleSizeBytes.get()).get(), position = 8 + titleSize;
+		byte[] titleBytes = ByteUtils.rip(data, 4, titleSize + 3).orElse(new byte[0]);
+		Optional<byte[]> valueNumberBytes = ByteUtils.rip(data, titleSize + 4, titleSize + 7);
+		if (!valueNumberBytes.isPresent()) {
+			return false;
+		}
+		String title = StringConverter.INSTANCE.bytesToSource(titleBytes).get();
+		int valueNumber = IntegerConverter.INSTANCE.bytesToSource(valueNumberBytes.get()).get();
+		for (int counter = 1; counter <= valueNumber; counter++) {
+			Optional<byte[]> keySizeBytes = ByteUtils.rip(data, position, position + 3);
+			if (!keySizeBytes.isPresent()) {
 				return false;
 			}
-			int titleSize = IntegerConverter.INSTANCE.bytesToSource(titleSizeBytes.get()).get(), position = 8 + titleSize;
-			byte[] titleBytes = ByteUtils.rip(data, 4, titleSize + 3).orElse(new byte[0]);
-			Optional<byte[]> valueNumberBytes = ByteUtils.rip(data, titleSize + 4, titleSize + 7);
-			if (!valueNumberBytes.isPresent()) {
+			position += 4;
+			int keySize = IntegerConverter.INSTANCE.bytesToSource(keySizeBytes.get()).get();
+			byte[] keyBytes = ByteUtils.rip(data, position, position + keySize - 1).orElse(new byte[0]);
+			position += keySize;
+			String key = StringConverter.INSTANCE.bytesToSource(keyBytes).get();
+			Optional<byte[]> valueSizeBytes = ByteUtils.rip(data, position, position + 3);
+			if (!valueSizeBytes.isPresent()) {
 				return false;
 			}
-			String title = StringConverter.INSTANCE.bytesToSource(titleBytes).get();
-			int valueNumber = IntegerConverter.INSTANCE.bytesToSource(valueNumberBytes.get()).get();
-			for (int counter = 1; counter <= valueNumber; counter++) {
-				Optional<byte[]> keySizeBytes = ByteUtils.rip(data, position, position + 3);
-				if (!keySizeBytes.isPresent()) {
-					return false;
-				}
-				position += 4;
-				int keySize = IntegerConverter.INSTANCE.bytesToSource(keySizeBytes.get()).get();
-				byte[] keyBytes = ByteUtils.rip(data, position, position + keySize - 1).orElse(new byte[0]);
-				position += keySize;
-				String key = StringConverter.INSTANCE.bytesToSource(keyBytes).get();
-				Optional<byte[]> valueSizeBytes = ByteUtils.rip(data, position, position + 3);
-				if (!valueSizeBytes.isPresent()) {
-					return false;
-				}
-				position += 4;
-				int valueSize = IntegerConverter.INSTANCE.bytesToSource(valueSizeBytes.get()).get();
-				byte[] valueBytes = ByteUtils.rip(data, position, position + valueSize - 1).orElse(new byte[0]);
-				position += valueSize;
-				Optional<byte[]> converterIdBytes = ByteUtils.rip(data, position, position);
-				if (!converterIdBytes.isPresent()) {
-					return false;
-				}
-				position++;
-				byte converterId = ByteConverter.INSTANCE.bytesToSource(converterIdBytes.get()).get();
-				Optional<EConverterContainer> converterContainerOptional = EConverterContainer.getById(converterId);
-				if (!converterContainerOptional.isPresent()) {
-					continue;
-				}
-				@SuppressWarnings("rawtypes")
-				IConverter valueConverter = converterContainerOptional.get().getConverter();
-				@SuppressWarnings("unchecked")
-				Optional<Object> valueOptional = valueConverter.bytesToSource(valueBytes);
-				if (!valueOptional.isPresent()) {
-					continue;
-				}
-				Object value = valueOptional.get();
+			position += 4;
+			int valueSize = IntegerConverter.INSTANCE.bytesToSource(valueSizeBytes.get()).get();
+			byte[] valueBytes = ByteUtils.rip(data, position, position + valueSize - 1).orElse(new byte[0]);
+			position += valueSize;
+			Optional<byte[]> converterIdBytes = ByteUtils.rip(data, position, position);
+			if (!converterIdBytes.isPresent()) {
+				return false;
+			}
+			position++;
+			byte converterId = ByteConverter.INSTANCE.bytesToSource(converterIdBytes.get()).get();
+			Optional<EConverterContainer> converterContainerOptional = EConverterContainer.getById(converterId);
+			if (!converterContainerOptional.isPresent()) {
+				continue;
+			}
+			@SuppressWarnings("rawtypes")
+			IConverter valueConverter = converterContainerOptional.get().getConverter();
+			@SuppressWarnings("unchecked")
+			Optional<Object> valueOptional = valueConverter.bytesToSource(valueBytes);
+			if (!valueOptional.isPresent()) {
+				continue;
+			}
+			Object value = valueOptional.get();
+			synchronized (this.mutex) {
 				map.put(key, value);
 			}
-			this.title = title;
-			return true;
 		}
+		synchronized (this.mutex) {
+			this.title = title;
+		}
+		return true;
 	}
 
 }
