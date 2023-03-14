@@ -40,7 +40,7 @@ public class MessageAsynchronousRequestBuilder implements IRequestBuilder {
 
 	/**
 	 * This constructor constructs a new {@link MessageAsynchronousRequestBuilder}
-	 * used to build new {@link MessageAsynchronousRequestBuilder} objects with the
+	 * used to build new {@link MessageAsynchronousRequest} objects with the
 	 * data provided and return them.
 	 */
 	private MessageAsynchronousRequestBuilder() {

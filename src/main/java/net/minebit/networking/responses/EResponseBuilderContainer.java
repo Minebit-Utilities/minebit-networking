@@ -2,6 +2,8 @@ package net.minebit.networking.responses;
 
 import java.util.Optional;
 
+import net.minebit.networking.responses.error.ErrorResponseBuilder;
+import net.minebit.networking.responses.error.ErrorResponseGuide;
 import net.minebit.networking.util.IGuide;
 
 /**
@@ -16,7 +18,9 @@ import net.minebit.networking.util.IGuide;
  */
 public enum EResponseBuilderContainer {
 
-	;
+	// @formatter:off
+	ERROR(ErrorResponseBuilder.ID, ErrorResponseGuide.INSTANCE);
+	// @formatter:on
 
 	private final byte id;
 	private final IResponseGuide guide;

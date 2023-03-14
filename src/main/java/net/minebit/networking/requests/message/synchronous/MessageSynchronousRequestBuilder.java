@@ -40,8 +40,8 @@ public class MessageSynchronousRequestBuilder implements IRequestBuilder {
 
 	/**
 	 * This constructor constructs a new {@link MessageSynchronousRequestBuilder}
-	 * used to build new {@link MessageSynchronousRequestBuilder} objects with the
-	 * data provided and return them.
+	 * used to build new {@link MessageSynchronousRequest} objects with the data
+	 * provided and return them.
 	 */
 	private MessageSynchronousRequestBuilder() {
 	}

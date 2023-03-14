@@ -32,7 +32,8 @@ public enum EConverterContainer {
 	LONG(LongConverter.ID, LongConverter.INSTANCE),
 	FLOAT(FloatConverter.ID, FloatConverter.INSTANCE),
 	DOUBLE(DoubleConverter.ID, DoubleConverter.INSTANCE),
-	CHARACTER(CharacterConverter.ID, CharacterConverter.INSTANCE);
+	CHARACTER(CharacterConverter.ID, CharacterConverter.INSTANCE),
+	BINARY(BinaryConverter.ID, BinaryConverter.INSTANCE);
 	// @formatter:on
 
 	private final byte id;
@@ -107,6 +108,9 @@ public enum EConverterContainer {
 	public static Optional<EConverterContainer> getOptimal(Object object) {
 		if (object instanceof byte[]) {
 			return Optional.of(RAW);
+		}
+		if (object instanceof boolean[]) {
+			return Optional.of(BINARY);
 		}
 		if (object instanceof String) {
 			return Optional.of(STRING);
