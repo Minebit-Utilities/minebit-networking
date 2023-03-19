@@ -4,6 +4,12 @@ import java.util.Optional;
 
 import net.minebit.networking.responses.error.ErrorResponseBuilder;
 import net.minebit.networking.responses.error.ErrorResponseGuide;
+import net.minebit.networking.responses.session.create.SessionCreateResponseBuilder;
+import net.minebit.networking.responses.session.create.SessionCreateResponseGuide;
+import net.minebit.networking.responses.session.end.SessionEndResponseBuilder;
+import net.minebit.networking.responses.session.end.SessionEndResponseGuide;
+import net.minebit.networking.responses.session.resume.SessionResumeResponseBuilder;
+import net.minebit.networking.responses.session.resume.SessionResumeResponseGuide;
 import net.minebit.networking.util.IGuide;
 
 /**
@@ -19,7 +25,10 @@ import net.minebit.networking.util.IGuide;
 public enum EResponseBuilderContainer {
 
 	// @formatter:off
-	ERROR(ErrorResponseBuilder.ID, ErrorResponseGuide.INSTANCE);
+	ERROR(ErrorResponseBuilder.ID, ErrorResponseGuide.INSTANCE),
+	SESSION_CREATE(SessionCreateResponseBuilder.ID, SessionCreateResponseGuide.INSTANCE),
+	SESSION_END(SessionEndResponseBuilder.ID, SessionEndResponseGuide.INSTANCE),
+	SESSION_RESUME(SessionResumeResponseBuilder.ID, SessionResumeResponseGuide.INSTANCE);
 	// @formatter:on
 
 	private final byte id;
