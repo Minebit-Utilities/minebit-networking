@@ -19,7 +19,7 @@ public class SessionResumeResponseBuilder implements IResponseBuilder {
 	/**
 	 * The unique id of the builder's container
 	 */
-	public static final byte ID = 0x01;
+	public static final byte ID = 0x03;
 
 	/**
 	 * This method returns a newly constructed empty

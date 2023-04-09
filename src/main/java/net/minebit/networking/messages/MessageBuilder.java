@@ -104,7 +104,9 @@ public class MessageBuilder implements ILoadableBuilder<Message> {
 		}
 		String title = StringConverter.INSTANCE.bytesToSource(titleBytes).get();
 		int valueNumber = IntegerConverter.INSTANCE.bytesToSource(valueNumberBytes.get()).get();
-		for (int counter = 1; counter <= valueNumber; counter++) {
+		String[] keys = new String[valueNumber];
+		Object[] values = new Object[valueNumber];
+		for (int counter = 0; counter < valueNumber; counter++) {
 			Optional<byte[]> keySizeBytes = ByteUtils.rip(data, position, position + 3);
 			if (!keySizeBytes.isPresent()) {
 				return false;
@@ -140,12 +142,14 @@ public class MessageBuilder implements ILoadableBuilder<Message> {
 				continue;
 			}
 			Object value = valueOptional.get();
-			synchronized (this.mutex) {
-				map.put(key, value);
-			}
+			keys[counter] = key;
+			values[counter] = value;
 		}
 		synchronized (this.mutex) {
 			this.title = title;
+			for (int counter = 0; counter < valueNumber; counter++) {
+				this.map.put(keys[counter], values[counter]);
+			}
 		}
 		return true;
 	}

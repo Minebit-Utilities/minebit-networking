@@ -4,6 +4,12 @@ import java.util.Optional;
 
 import net.minebit.networking.responses.error.ErrorResponseBuilder;
 import net.minebit.networking.responses.error.ErrorResponseGuide;
+import net.minebit.networking.responses.message.asynchronous.MessageAsynchronousResponseBuilder;
+import net.minebit.networking.responses.message.asynchronous.MessageAsynchronousResponseGuide;
+import net.minebit.networking.responses.message.synchronous.MessageSynchronousResponseBuilder;
+import net.minebit.networking.responses.message.synchronous.MessageSynchronousResponseGuide;
+import net.minebit.networking.responses.message.update.MessageUpdateResponseBuilder;
+import net.minebit.networking.responses.message.update.MessageUpdateResponseGuide;
 import net.minebit.networking.responses.session.create.SessionCreateResponseBuilder;
 import net.minebit.networking.responses.session.create.SessionCreateResponseGuide;
 import net.minebit.networking.responses.session.end.SessionEndResponseBuilder;
@@ -28,7 +34,10 @@ public enum EResponseBuilderContainer {
 	ERROR(ErrorResponseBuilder.ID, ErrorResponseGuide.INSTANCE),
 	SESSION_CREATE(SessionCreateResponseBuilder.ID, SessionCreateResponseGuide.INSTANCE),
 	SESSION_END(SessionEndResponseBuilder.ID, SessionEndResponseGuide.INSTANCE),
-	SESSION_RESUME(SessionResumeResponseBuilder.ID, SessionResumeResponseGuide.INSTANCE);
+	SESSION_RESUME(SessionResumeResponseBuilder.ID, SessionResumeResponseGuide.INSTANCE),
+	MESSAGE_UPDATE(MessageUpdateResponseBuilder.ID, MessageUpdateResponseGuide.INSTANCE),
+	MESSAGE_SYNCHRONOUS(MessageSynchronousResponseBuilder.ID, MessageSynchronousResponseGuide.INSTANCE),
+	MESSAGE_ASYNCHRONOUS(MessageAsynchronousResponseBuilder.ID, MessageAsynchronousResponseGuide.INSTANCE);
 	// @formatter:on
 
 	private final byte id;

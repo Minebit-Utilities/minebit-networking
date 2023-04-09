@@ -31,7 +31,7 @@ public class ErrorResponseBuilder implements IResponseBuilder {
 	 * {@link ErrorResponseBuilder} builder.
 	 * 
 	 * @return The new {@link ErrorResponseBuilder}
-	 * @see #ErrorInputResponseBuilder()
+	 * @see #ErrorResponseBuilder()
 	 */
 	public static ErrorResponseBuilder empty() {
 		return new ErrorResponseBuilder();

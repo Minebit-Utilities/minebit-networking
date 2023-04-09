@@ -16,8 +16,8 @@ import net.minebit.networking.responses.IResponseGuide;
  */
 public class ErrorResponseGuide implements IResponseGuide {
 
-	/*	
-	 * The only instance of the {@link ErrorInputResponseGuide} object.
+	/**
+	 * The only instance of the {@link ErrorResponseGuide} object.
 	 */
 	public static final ErrorResponseGuide INSTANCE = new ErrorResponseGuide();
 

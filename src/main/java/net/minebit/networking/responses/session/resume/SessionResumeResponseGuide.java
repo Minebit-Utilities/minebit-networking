@@ -16,7 +16,7 @@ import net.minebit.networking.responses.IResponseGuide;
  */
 public class SessionResumeResponseGuide implements IResponseGuide {
 
-	/*
+	/**
 	 * The only instance of the {@link SessionResumeResponseGuide} object.
 	 */
 	public static final SessionResumeResponseGuide INSTANCE = new SessionResumeResponseGuide();

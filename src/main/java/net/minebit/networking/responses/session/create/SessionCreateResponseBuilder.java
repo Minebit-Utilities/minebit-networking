@@ -51,7 +51,9 @@ public class SessionCreateResponseBuilder implements IResponseBuilder {
 	 * @param sessionId The session id
 	 */
 	public void setSessionId(int sessionId) {
-		this.sessionId = sessionId;
+		synchronized (this.mutex) {
+			this.sessionId = sessionId;
+		}
 	}
 
 	@Override
